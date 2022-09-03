@@ -15,6 +15,8 @@
   <exec_depend>ldlidar</exec_depend>
   <exec_depend>realsense2_camera</exec_depend>
   <exec_depend>akros2_drive</exec_depend>
+  <exec_depend>rosbridge_server</exec_depend>
+  <exec_depend>rosboard</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>
