@@ -18,6 +18,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 from launch.conditions import IfCondition
 from launch_ros.actions import Node
 
@@ -33,7 +34,7 @@ def generate_launch_description():
         [FindPackageShare('realsense2_camera'), 'launch', 'rs_launch.py'])
     
     rosbridge_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_bringup'), 'launch', 'rosbridge_server_launch.py'])
+        [FindPackageShare('rosbridge_server'), 'launch', 'rosbridge_websocket_launch.xml'])
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -80,7 +81,7 @@ def generate_launch_description():
                               'unite_imu_method': 'linear_interpolation'}.items()),
         
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(rosbridge_launch_path),
+            XMLLaunchDescriptionSource(rosbridge_launch_path),
             condition=IfCondition(LaunchConfiguration('viz_foxglove'))),
         
         Node(
