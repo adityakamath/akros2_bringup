@@ -33,40 +33,54 @@ def generate_launch_description():
     t265_launch_path = PathJoinSubstitution(
         [FindPackageShare('realsense2_camera'), 'launch', 'rs_launch.py'])
     
-    rosbridge_launch_path = PathJoinSubstitution(
-        [FindPackageShare('rosbridge_server'), 'launch', 'rosbridge_websocket_launch.xml'])
-    
     return LaunchDescription([
         DeclareLaunchArgument(
-            name='namespace',
-            default_value='akros2',
-            description='Namespace of the robot'),
+            name='drive_ns',
+            default_value='drive',
+            description='Namespace for the Drive subsystem'),
+        
+        DeclareLaunchArgument(
+            name='sensor_ns',
+            default_value='sensor',
+            description='Namespace for the Sensors subsystem'),
         
         DeclareLaunchArgument(
             name='t265',
-            default_value='false',
-            description='Enable Realsense T265 Pose'),
-        
-        DeclareLaunchArgument(
-            name='viz_foxglove',
-            default_value='false',
-            description='Enable Foxglove visualization using ROSBridge'),
-        
-        DeclareLaunchArgument(
-            name='viz_rosboard',
             default_value='true',
-            description='Enable visualization using ROSBoard'),
+            description='Enable T265'),
+        
+        DeclareLaunchArgument(
+            name='drive',
+            default_value='true',
+            description='Enable Drive'),
+        
+        DeclareLaunchArgument(
+            name='lidar',
+            default_value='true',
+            description='Enable LIDAR'),
+        
+        DeclareLaunchArgument(
+            name='foxglove',
+            default_value='true',
+            description='Enable Foxglove Bridge'),
+        
+        DeclareLaunchArgument(
+            name='rosboard',
+            default_value='false',
+            description='Enable ROSBoard'),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drive_launch_path),
-            launch_arguments={'namespace': LaunchConfiguration('namespace'),
+            condition=IfCondition(LaunchConfiguration('drive')),
+            launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
                               'port_addr': '/dev/ttyUSB_TEENSY',
-                              'ps4_addr': '84:30:95:2C:67:7C'}.items()),
+                              'joy_config': 'ps4'}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(ld06_launch_path),
+            condition=IfCondition(LaunchConfiguration('lidar')),
             launch_arguments={'serial_port': '/dev/ttyUSB_LIDAR',
-                              'topic_name': ['/', LaunchConfiguration('namespace'), '/scan'],
+                              'topic_name': ['/', LaunchConfiguration('sensor_ns'), '/scan'],
                               'lidar_frame': 'laser_frame',
                               'range_threshold': '0.005'}.items()),
         
@@ -75,17 +89,21 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('t265')),
             launch_arguments={'device_type': 't265',
                               'enable_pose': 'true',
-                              'enable_fisheye1': 'false',
-                              'enable_fisheye2': 'false',
+                              'enable_gyro': 'true',
+                              'enable_accel': 'true',
+                              'enable_fisheye1': 'true',
+                              'enable_fisheye2': 'true',
                               'linear_accel_cov': '0.001',
-                              'unite_imu_method': 'linear_interpolation'}.items()),
-        
-        IncludeLaunchDescription(
-            XMLLaunchDescriptionSource(rosbridge_launch_path),
-            condition=IfCondition(LaunchConfiguration('viz_foxglove'))),
+                              'unite_imu_method': '2'}.items()), #linear-interpolation
         
         Node(
-            condition=IfCondition(LaunchConfiguration('viz_rosboard')),
+            condition=IfCondition(LaunchConfiguration('foxglove')),
+            package='foxglove_bridge',
+            executable='foxglove_bridge',
+            name='foxglove'),
+        
+        Node(
+            condition=IfCondition(LaunchConfiguration('rosboard')),
             package='rosboard',
             executable='rosboard_node',
             name='rosboard')
