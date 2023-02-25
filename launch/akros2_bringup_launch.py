@@ -55,6 +55,11 @@ def generate_launch_description():
             description='Enable Drive'),
         
         DeclareLaunchArgument(
+            name='joy',
+            default_value='ps4',
+            description='Select Game Controller: ps4, ps3, stadia'),
+        
+        DeclareLaunchArgument(
             name='lidar',
             default_value='true',
             description='Enable LIDAR'),
@@ -74,7 +79,7 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('drive')),
             launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
                               'port_addr': '/dev/ttyUSB_TEENSY',
-                              'joy_config': 'ps4'}.items()),
+                              'joy_config': LaunchConfiguration('joy')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(ld06_launch_path),
