@@ -40,8 +40,8 @@ def generate_launch_description():
             description='Namespace for the Drive subsystem'),
         
         DeclareLaunchArgument(
-            name='sensor_ns',
-            default_value='sensor',
+            name='sense_ns',
+            default_value='sense',
             description='Namespace for the Sensors subsystem'),
         
         DeclareLaunchArgument(
@@ -85,7 +85,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(ld06_launch_path),
             condition=IfCondition(LaunchConfiguration('lidar')),
             launch_arguments={'serial_port': '/dev/ttyUSB_LIDAR',
-                              'topic_name': ['/', LaunchConfiguration('sensor_ns'), '/scan'],
+                              'topic_name': ['/', LaunchConfiguration('sense_ns'), '/scan'],
                               'lidar_frame': 'laser_frame',
                               'range_threshold': '0.005'}.items()),
         
