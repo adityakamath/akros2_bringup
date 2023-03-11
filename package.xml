@@ -15,6 +15,7 @@
   <depend>ldlidar</depend>
   <depend>realsense2_camera</depend>
   <depend>akros2_drive</depend>
+  <depend>akros2_description</depend>
   <depend>foxglove_bridge</depend>
   <depend>rosboard</depend>
 
