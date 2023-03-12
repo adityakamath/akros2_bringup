@@ -36,16 +36,21 @@ def generate_launch_description():
     description_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_description'), 'launch', 'akros2_description_launch.py'])
     
-    return LaunchDescription([
-        DeclareLaunchArgument(
-            name='drive_ns',
-            default_value='drive',
-            description='Namespace for the Drive subsystem'),
-        
+    return LaunchDescription([       
         DeclareLaunchArgument(
             name='lidar_ns',
             default_value='ld06',
-            description='Namespace for the LiDAR component'),
+            description='Namespace for the LIDAR component'),
+        
+        DeclareLaunchArgument(
+            name='lidar',
+            default_value='true',
+            description='Enable LIDAR'),
+        
+        DeclareLaunchArgument(
+            name='lidar_port',
+            default_value='/dev/ttyUSB_LIDAR',
+            description='LIDAR Port Address'),
         
         DeclareLaunchArgument(
             name='tracking_ns',
@@ -68,19 +73,34 @@ def generate_launch_description():
             description='Enable T265 Accel and Gyro data'),
         
         DeclareLaunchArgument(
+            name='description',
+            default_value='true',
+            description='Enable URDF description'),
+        
+        DeclareLaunchArgument(
+            name='joint_state_topic',
+            default_value='joint_states',
+            description='Switch between measured (joint_states) / required (req_states) Joint States'),
+        
+        DeclareLaunchArgument(
+            name='drive_ns',
+            default_value='drive',
+            description='Namespace for the Drive subsystem'),
+        
+        DeclareLaunchArgument(
             name='drive',
             default_value='true',
             description='Enable Drive'),
         
         DeclareLaunchArgument(
+            name='micro_port',
+            default_value='/dev/ttyUSB_TEENSY',
+            description='Microcontroller Port Address'),
+        
+        DeclareLaunchArgument(
             name='joy',
             default_value='ps4',
             description='Select Game Controller: ps4, ps3, stadia'),
-        
-        DeclareLaunchArgument(
-            name='lidar',
-            default_value='true',
-            description='Enable LIDAR'),
         
         DeclareLaunchArgument(
             name='foxglove',
@@ -91,28 +111,11 @@ def generate_launch_description():
             name='rosboard',
             default_value='false',
             description='Enable ROSBoard'),
-
-        DeclareLaunchArgument(
-            name='description',
-            default_value='true',
-            description='Enable URDF description'),
-        
-        DeclareLaunchArgument(
-            name='joint_state_topic',
-            default_value='joint_states',
-            description='Switch between measured (joint_states) / required (req_states) Joint States'),
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_launch_path),
-            condition=IfCondition(LaunchConfiguration('drive')),
-            launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
-                              'port_addr': '/dev/ttyUSB_TEENSY',
-                              'joy_config': LaunchConfiguration('joy')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(ld06_launch_path),
             condition=IfCondition(LaunchConfiguration('lidar')),
-            launch_arguments={'serial_port': '/dev/ttyUSB_LIDAR',
+            launch_arguments={'serial_port': LaunchConfiguration('lidar_port'),
                               'topic_name': ['/', LaunchConfiguration('lidar_ns'), '/scan'],
                               'lidar_frame': 'laser_frame',
                               'range_threshold': '0.005'}.items()),
@@ -120,8 +123,8 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(t265_launch_path),
             condition=IfCondition(LaunchConfiguration('t265')),
-            launch_arguments={'device_type': 't265',
-                              'camera_name': 't265',
+            launch_arguments={'device_type': LaunchConfiguration('tracking_ns'),
+                              'camera_name': LaunchConfiguration('tracking_ns'),
                               'enable_pose': 'true',
                               'enable_sync': 'true',
                               'enable_gyro': LaunchConfiguration('t265_imu'),
@@ -135,9 +138,16 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(description_launch_path),
             condition=IfCondition(LaunchConfiguration('description')),
             launch_arguments={'micro_ros_ns': LaunchConfiguration('drive_ns'),
-                              'micro_ros': 'true',
+                              'micro_ros': LaunchConfiguration('drive'),
                               'joint_state_topic': LaunchConfiguration('joint_state_topic'),
                               'mesh_pub': LaunchConfiguration('foxglove')}.items()), # publish mesh array if Foxglove is enabled
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(drive_launch_path),
+            condition=IfCondition(LaunchConfiguration('drive')),
+            launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
+                              'port_addr': LaunchConfiguration('micro_port'),
+                              'joy_config': LaunchConfiguration('joy')}.items()),
 
         Node(
             condition=IfCondition(LaunchConfiguration('foxglove')),
