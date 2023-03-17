@@ -36,6 +36,9 @@ def generate_launch_description():
     description_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_description'), 'launch', 'akros2_description_launch.py'])
     
+    rosbridge_launch_path = PathJoinSubstitution(
+        [FindPackageShare('rosbridge_server'), 'launch', 'rosbridge_websocket_launch.xml'])
+    
     return LaunchDescription([       
         DeclareLaunchArgument(
             name='lidar_ns',
@@ -103,9 +106,9 @@ def generate_launch_description():
             description='Select Game Controller: ps4, ps3, stadia'),
         
         DeclareLaunchArgument(
-            name='foxglove',
+            name='rosbridge',
             default_value='true',
-            description='Enable Foxglove Bridge'),
+            description='Enable ROSBridge Server'),
         
         DeclareLaunchArgument(
             name='rosboard',
@@ -140,7 +143,7 @@ def generate_launch_description():
             launch_arguments={'micro_ros_ns': LaunchConfiguration('drive_ns'),
                               'micro_ros': LaunchConfiguration('drive'),
                               'joint_state_topic': LaunchConfiguration('joint_state_topic'),
-                              'mesh_pub': LaunchConfiguration('foxglove')}.items()), # publish mesh array if Foxglove is enabled
+                              'mesh_pub': LaunchConfiguration('rosbridge')}.items()), # publish mesh array if ROSBridge Server is enabled
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drive_launch_path),
@@ -148,12 +151,10 @@ def generate_launch_description():
             launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
                               'port_addr': LaunchConfiguration('micro_port'),
                               'joy_config': LaunchConfiguration('joy')}.items()),
-
-        Node(
-            condition=IfCondition(LaunchConfiguration('foxglove')),
-            package='foxglove_bridge',
-            executable='foxglove_bridge',
-            name='foxglove'),
+        
+        IncludeLaunchDescription(
+            XMLLaunchDescriptionSource(rosbridge_launch_path),
+            condition=IfCondition(LaunchConfiguration('rosbridge'))),
         
         Node(
             condition=IfCondition(LaunchConfiguration('rosboard')),
