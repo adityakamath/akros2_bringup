@@ -42,7 +42,7 @@ def generate_launch_description():
     return LaunchDescription([       
         DeclareLaunchArgument(
             name='lidar_ns',
-            default_value='ld06',
+            default_value='lidar',
             description='Namespace for the LIDAR component'),
         
         DeclareLaunchArgument(
@@ -72,8 +72,8 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='t265_imu',
-            default_value='true',
-            description='Enable T265 Accel and Gyro data'),
+            default_value='false',
+            description='Enable T265 Accel and Gyro (raw) data'),
         
         DeclareLaunchArgument(
             name='description',
@@ -115,13 +115,18 @@ def generate_launch_description():
             default_value='false',
             description='Enable ROSBoard'),
         
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(ld06_launch_path),
+        Node(
             condition=IfCondition(LaunchConfiguration('lidar')),
-            launch_arguments={'serial_port': LaunchConfiguration('lidar_port'),
-                              'topic_name': ['/', LaunchConfiguration('lidar_ns'), '/scan'],
-                              'lidar_frame': 'laser_frame',
-                              'range_threshold': '0.005'}.items()),
+            package='ldlidar',
+            executable='ldlidar',
+            name='ld06',
+            output='screen',
+            namespace=LaunchConfiguration("lidar_ns"),
+            parameters=[{'serial_port': LaunchConfiguration("lidar_port")},
+                        {'topic_name': ['/', LaunchConfiguration('lidar_ns'), '/scan']},
+                        {'lidar_frame': 'laser_frame'},
+                        {'range_threshold': 0.005}
+            ]),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(t265_launch_path),
