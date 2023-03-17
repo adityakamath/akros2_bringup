@@ -73,7 +73,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name='t265_imu',
             default_value='false',
-            description='Enable T265 Accel and Gyro (raw) data'),
+            description='Enable T265 Accel and Gyro (raw) data. Publishes combined IMU message if FALSE'),
         
         DeclareLaunchArgument(
             name='description',
