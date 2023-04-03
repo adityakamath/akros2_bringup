@@ -30,6 +30,9 @@ def generate_launch_description():
     ld06_launch_path = PathJoinSubstitution(
         [FindPackageShare('ldlidar'), 'launch', 'ldlidar.launch.py'])
     
+    laser_filter_config_path = PathJoinSubstitution(
+        [FindPackageShare("akros2_bringup"), "config", "laser_filter_config.yaml"])
+    
     t265_launch_path = PathJoinSubstitution(
         [FindPackageShare('realsense2_camera'), 'launch', 'rs_launch.py'])
     
@@ -126,6 +129,17 @@ def generate_launch_description():
                         {'topic_name': ['/', LaunchConfiguration('lidar_ns'), '/scan']},
                         {'lidar_frame': 'laser_frame'},
                         {'range_threshold': 0.005}
+            ]),
+        
+        Node(
+            condition=IfCondition(LaunchConfiguration('lidar')),
+            package="laser_filters",
+            executable="scan_to_scan_filter_chain",
+            name="laser_filter",
+            parameters=[laser_filter_config_path],
+            remappings=[
+                (['/scan'], ['/', LaunchConfiguration('lidar_ns'), '/scan']),
+                (['/scan_filtered'], ['/', LaunchConfiguration('lidar_ns'), '/scan_filtered']),
             ]),
         
         IncludeLaunchDescription(
