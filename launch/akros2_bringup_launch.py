@@ -55,7 +55,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='lidar_port',
-            default_value='/dev/ttyUSB_LIDAR',
+            default_value='/dev/ttyLIDAR',
             description='LIDAR Port Address'),
         
         DeclareLaunchArgument(
@@ -100,7 +100,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='micro_port',
-            default_value='/dev/ttyUSB_TEENSY',
+            default_value='/dev/ttyTEENSY',
             description='Microcontroller Port Address'),
         
         DeclareLaunchArgument(
@@ -117,6 +117,20 @@ def generate_launch_description():
             name='rosboard',
             default_value='false',
             description='Enable ROSBoard'),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(drive_launch_path),
+            condition=IfCondition(LaunchConfiguration('drive')),
+            launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
+                              'port_addr': LaunchConfiguration('micro_port'),
+                              'joy_config': LaunchConfiguration('joy')}.items()),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(description_launch_path),
+            condition=IfCondition(LaunchConfiguration('description')),
+            launch_arguments={'micro_ros_ns': LaunchConfiguration('drive_ns'),
+                              'micro_ros': LaunchConfiguration('drive'),
+                              'joint_state_topic': LaunchConfiguration('joint_state_topic')}.items()),
         
         Node(
             condition=IfCondition(LaunchConfiguration('lidar')),
@@ -155,21 +169,6 @@ def generate_launch_description():
                               'enable_fisheye2': LaunchConfiguration('t265_fisheye'),
                               'linear_accel_cov': '0.001',
                               'unite_imu_method': '2'}.items()), #linear-interpolation
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(description_launch_path),
-            condition=IfCondition(LaunchConfiguration('description')),
-            launch_arguments={'micro_ros_ns': LaunchConfiguration('drive_ns'),
-                              'micro_ros': LaunchConfiguration('drive'),
-                              'joint_state_topic': LaunchConfiguration('joint_state_topic'),
-                              'mesh_pub': LaunchConfiguration('rosbridge')}.items()), # publish mesh array if ROSBridge Server is enabled
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_launch_path),
-            condition=IfCondition(LaunchConfiguration('drive')),
-            launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
-                              'port_addr': LaunchConfiguration('micro_port'),
-                              'joy_config': LaunchConfiguration('joy')}.items()),
         
         IncludeLaunchDescription(
             XMLLaunchDescriptionSource(rosbridge_launch_path),
