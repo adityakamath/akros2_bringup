@@ -14,13 +14,13 @@
 
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, ExecuteProcess
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch_ros.substitutions import FindPackageShare
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 def generate_launch_description():
 
@@ -76,7 +76,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name='t265_imu',
             default_value='false',
-            description='Enable T265 Accel and Gyro (raw) data. Publishes combined IMU message if FALSE'),
+            description='Enable individual Accel and Gyro data from T265. Publishes combined IMU message if false'),
         
         DeclareLaunchArgument(
             name='description',
@@ -99,14 +99,19 @@ def generate_launch_description():
             description='Enable Drive'),
         
         DeclareLaunchArgument(
-            name='micro_port',
+            name='uros_agent',
+            default_value='false',
+            description='Enable micro-ROS Agent from the launch file'),
+        
+        DeclareLaunchArgument(
+            name='uros_port',
             default_value='/dev/ttyTEENSY',
-            description='Microcontroller Port Address'),
+            description='Microcontroller port address for micro-ROS'),
         
         DeclareLaunchArgument(
             name='joy',
             default_value='ps4',
-            description='Select Game Controller: ps4, ps3, stadia'),
+            description='Select controller: ps4, ps3, stadia'),
         
         DeclareLaunchArgument(
             name='rosbridge',
@@ -122,8 +127,9 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(drive_launch_path),
             condition=IfCondition(LaunchConfiguration('drive')),
             launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
-                              'port_addr': LaunchConfiguration('micro_port'),
-                              'joy_config': LaunchConfiguration('joy')}.items()),
+                              'port_addr': LaunchConfiguration('uros_port'),
+                              'joy_config': LaunchConfiguration('joy'),
+                              'agent': LaunchConfiguration('uros_agent')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(description_launch_path),
@@ -132,29 +138,34 @@ def generate_launch_description():
                               'micro_ros': LaunchConfiguration('drive'),
                               'joint_state_topic': LaunchConfiguration('joint_state_topic')}.items()),
         
-        Node(
+        GroupAction(
             condition=IfCondition(LaunchConfiguration('lidar')),
-            package='ldlidar',
-            executable='ldlidar',
-            name='ld06',
-            output='screen',
-            namespace=LaunchConfiguration("lidar_ns"),
-            parameters=[{'serial_port': LaunchConfiguration("lidar_port")},
-                        {'topic_name': ['/', LaunchConfiguration('lidar_ns'), '/scan']},
-                        {'lidar_frame': 'laser_frame'},
-                        {'range_threshold': 0.005}
-            ]),
+            actions = [
+                Node(
+                    condition=IfCondition(LaunchConfiguration('lidar')),
+                    package='ldlidar',
+                    executable='ldlidar',
+                    name='ld06',
+                    output='screen',
+                    namespace=LaunchConfiguration("lidar_ns"),
+                    parameters=[{'serial_port': LaunchConfiguration("lidar_port")},
+                                {'topic_name': ['/', LaunchConfiguration('lidar_ns'), '/scan']},
+                                {'lidar_frame': 'laser_frame'},
+                                {'range_threshold': 0.005}
+                    ]),
         
-        Node(
-            condition=IfCondition(LaunchConfiguration('lidar')),
-            package="laser_filters",
-            executable="scan_to_scan_filter_chain",
-            name="laser_filter",
-            parameters=[laser_filter_config_path],
-            remappings=[
-                (['/scan'], ['/', LaunchConfiguration('lidar_ns'), '/scan']),
-                (['/scan_filtered'], ['/', LaunchConfiguration('lidar_ns'), '/scan_filtered']),
-            ]),
+                Node(
+                    condition=IfCondition(LaunchConfiguration('lidar')),
+                    package="laser_filters",
+                    executable="scan_to_scan_filter_chain",
+                    name="laser_filter",
+                    parameters=[laser_filter_config_path],
+                    remappings=[
+                        (['/scan'], ['/', LaunchConfiguration('lidar_ns'), '/scan']),
+                        (['/scan_filtered'], ['/', LaunchConfiguration('lidar_ns'), '/scan_filtered'])
+                    ])
+            ]
+        ),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(t265_launch_path),
@@ -178,6 +189,6 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('rosboard')),
             package='rosboard',
             executable='rosboard_node',
-            name='rosboard')
-
+            name='rosboard'
+        ),
     ])
