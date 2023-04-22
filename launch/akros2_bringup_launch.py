@@ -128,8 +128,7 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('drive')),
             launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
                               'port_addr': LaunchConfiguration('uros_port'),
-                              'joy_config': LaunchConfiguration('joy'),
-                              'agent': LaunchConfiguration('uros_agent')}.items()),
+                              'joy_config': LaunchConfiguration('joy')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(description_launch_path),
