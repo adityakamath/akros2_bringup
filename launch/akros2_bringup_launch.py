@@ -44,6 +44,31 @@ def generate_launch_description():
     
     return LaunchDescription([       
         DeclareLaunchArgument(
+            name='drive_ns',
+            default_value='drive',
+            description='Namespace for the Drive subsystem'),
+        
+        DeclareLaunchArgument(
+            name='drive',
+            default_value='true',
+            description='Enable Drive'),
+        
+        DeclareLaunchArgument(
+            name='joy',
+            default_value='ps4',
+            description='Select controller: ps4, ps3, stadia'),
+        
+        DeclareLaunchArgument(
+            name='description',
+            default_value='true',
+            description='Enable URDF description'),
+        
+        DeclareLaunchArgument(
+            name='joint_state_topic',
+            default_value='joint_states',
+            description='Switch between measured (joint_states) / required (req_states) Joint States'),
+        
+        DeclareLaunchArgument(
             name='lidar_ns',
             default_value='lidar',
             description='Namespace for the LIDAR component'),
@@ -79,41 +104,6 @@ def generate_launch_description():
             description='Enable individual Accel and Gyro data from T265. Publishes combined IMU message if false'),
         
         DeclareLaunchArgument(
-            name='description',
-            default_value='true',
-            description='Enable URDF description'),
-        
-        DeclareLaunchArgument(
-            name='joint_state_topic',
-            default_value='joint_states',
-            description='Switch between measured (joint_states) / required (req_states) Joint States'),
-        
-        DeclareLaunchArgument(
-            name='drive_ns',
-            default_value='drive',
-            description='Namespace for the Drive subsystem'),
-        
-        DeclareLaunchArgument(
-            name='drive',
-            default_value='true',
-            description='Enable Drive'),
-        
-        DeclareLaunchArgument(
-            name='uros_agent',
-            default_value='false',
-            description='Enable micro-ROS Agent from the launch file'),
-        
-        DeclareLaunchArgument(
-            name='uros_port',
-            default_value='/dev/ttyTEENSY',
-            description='Microcontroller port address for micro-ROS'),
-        
-        DeclareLaunchArgument(
-            name='joy',
-            default_value='ps4',
-            description='Select controller: ps4, ps3, stadia'),
-        
-        DeclareLaunchArgument(
             name='rosbridge',
             default_value='true',
             description='Enable ROSBridge Server'),
@@ -127,14 +117,13 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(drive_launch_path),
             condition=IfCondition(LaunchConfiguration('drive')),
             launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
-                              'port_addr': LaunchConfiguration('uros_port'),
                               'joy_config': LaunchConfiguration('joy')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(description_launch_path),
             condition=IfCondition(LaunchConfiguration('description')),
-            launch_arguments={'micro_ros_ns': LaunchConfiguration('drive_ns'),
-                              'micro_ros': LaunchConfiguration('drive'),
+            launch_arguments={'uros_ns': LaunchConfiguration('drive_ns'),
+                              'uros': LaunchConfiguration('drive'),
                               'joint_state_topic': LaunchConfiguration('joint_state_topic')}.items()),
         
         GroupAction(
