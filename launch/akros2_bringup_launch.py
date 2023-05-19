@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Aditya Kamath
+# Copyright (c) 2023 Aditya Kamath
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,16 +94,6 @@ def generate_launch_description():
             description='Enable T265'),
         
         DeclareLaunchArgument(
-            name='t265_fisheye',
-            default_value='false',
-            description='Enable T265 Fisheye Cameras'),
-        
-        DeclareLaunchArgument(
-            name='t265_imu',
-            default_value='false',
-            description='Enable individual Accel and Gyro data from T265. Publishes combined IMU message if false'),
-        
-        DeclareLaunchArgument(
             name='rosbridge',
             default_value='true',
             description='Enable ROSBridge Server'),
@@ -116,7 +106,7 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drive_launch_path),
             condition=IfCondition(LaunchConfiguration('drive')),
-            launch_arguments={'namespace': LaunchConfiguration('drive_ns'),
+            launch_arguments={'ns': LaunchConfiguration('drive_ns'),
                               'joy_config': LaunchConfiguration('joy')}.items()),
         
         IncludeLaunchDescription(
@@ -130,7 +120,6 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('lidar')),
             actions = [
                 Node(
-                    condition=IfCondition(LaunchConfiguration('lidar')),
                     package='ldlidar',
                     executable='ldlidar',
                     name='ld06',
@@ -143,7 +132,6 @@ def generate_launch_description():
                     ]),
         
                 Node(
-                    condition=IfCondition(LaunchConfiguration('lidar')),
                     package="laser_filters",
                     executable="scan_to_scan_filter_chain",
                     name="laser_filter",
@@ -152,8 +140,7 @@ def generate_launch_description():
                         (['/scan'], ['/', LaunchConfiguration('lidar_ns'), '/scan']),
                         (['/scan_filtered'], ['/', LaunchConfiguration('lidar_ns'), '/scan_filtered'])
                     ])
-            ]
-        ),
+            ]),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(t265_launch_path),
@@ -162,10 +149,10 @@ def generate_launch_description():
                               'camera_name': LaunchConfiguration('tracking_ns'),
                               'enable_pose': 'true',
                               'enable_sync': 'true',
-                              'enable_gyro': LaunchConfiguration('t265_imu'),
-                              'enable_accel': LaunchConfiguration('t265_imu'),
-                              'enable_fisheye1': LaunchConfiguration('t265_fisheye'),
-                              'enable_fisheye2': LaunchConfiguration('t265_fisheye'),
+                              'enable_gyro': 'false',
+                              'enable_accel': 'false',
+                              'enable_fisheye1': 'false',
+                              'enable_fisheye2': 'false',
                               'linear_accel_cov': '0.001',
                               'unite_imu_method': '2'}.items()), #linear-interpolation
         
@@ -177,6 +164,5 @@ def generate_launch_description():
             condition=IfCondition(LaunchConfiguration('rosboard')),
             package='rosboard',
             executable='rosboard_node',
-            name='rosboard'
-        ),
+            name='rosboard'),
     ])
