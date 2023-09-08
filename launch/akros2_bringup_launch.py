@@ -50,7 +50,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='drive',
-            default_value='true',
+            default_value='True',
             description='Enable Drive'),
         
         DeclareLaunchArgument(
@@ -60,7 +60,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='description',
-            default_value='true',
+            default_value='True',
             description='Enable URDF description'),
         
         DeclareLaunchArgument(
@@ -75,7 +75,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='lidar',
-            default_value='true',
+            default_value='True',
             description='Enable LIDAR'),
         
         DeclareLaunchArgument(
@@ -90,17 +90,17 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='t265',
-            default_value='true',
+            default_value='True',
             description='Enable T265'),
         
         DeclareLaunchArgument(
             name='rosbridge',
-            default_value='true',
+            default_value='True',
             description='Enable ROSBridge Server'),
         
         DeclareLaunchArgument(
             name='rosboard',
-            default_value='false',
+            default_value='False',
             description='Enable ROSBoard'),
         
         IncludeLaunchDescription(
