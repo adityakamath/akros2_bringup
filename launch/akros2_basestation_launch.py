@@ -40,13 +40,13 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='joy_config',
-            default_value='ps3',
+            default_value='sn39pro',
             description='Select Controller: ps3/sixaxis, ps4, stadia, sn30pro'),
         
         DeclareLaunchArgument(
             name='viz_config',
             default_value='none',
-            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), none (Disabled)'),
+            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rosboard (ROSBoard), none (Disabled)'),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drive_launch_path),
@@ -70,5 +70,10 @@ def generate_launch_description():
                 'port': '9090',
                 'use_compression': 'true',
             }.items()),
-
+        
+        Node(
+            condition=LaunchConfigurationEquals('viz_config', 'rosboard'),
+            package='rosboard',
+            executable='rosboard_node',
+            name='rosboard'),
     ])
