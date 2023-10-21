@@ -48,7 +48,7 @@ def generate_launch_description():
     return LaunchDescription([ 
         DeclareLaunchArgument(
             name='drive',
-            default_value='True',
+            default_value='true',
             description='Enable Drive'),
         
         DeclareLaunchArgument(
@@ -63,7 +63,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='description',
-            default_value='True',
+            default_value='true',
             description='Enable URDF description'),
         
         DeclareLaunchArgument(
@@ -73,7 +73,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='lidar',
-            default_value='True',
+            default_value='true',
             description='Enable LIDAR'),
         
         DeclareLaunchArgument(
@@ -97,16 +97,6 @@ def generate_launch_description():
             description='Namespace for the Tracking Camera component'),
         
         DeclareLaunchArgument(
-<<<<<<< HEAD
-            name='t265',
-            default_value='True',
-            description='Enable T265'),
-        
-        DeclareLaunchArgument(
-            name='rosbridge',
-            default_value='True',
-            description='Enable ROSBridge Server'),
-=======
             name='viz',
             default_value='false',
             description='Enable Visualization'),
@@ -115,11 +105,10 @@ def generate_launch_description():
             name='foxglove',
             default_value='true',
             description='Enable Foxglove Server'),
->>>>>>> c1bb969 (update launch file)
         
         DeclareLaunchArgument(
             name='rosboard',
-            default_value='False',
+            default_value='false',
             description='Enable ROSBoard'),
         
         IncludeLaunchDescription(
@@ -186,14 +175,6 @@ def generate_launch_description():
                         'use_compression': 'true',
                     }.items()),
         
-<<<<<<< HEAD
-        Node(
-            condition=IfCondition(LaunchConfiguration('rosboard')),
-            package='rosboard',
-            executable='rosboard_node',
-            name='rosboard'),
-    ])
-=======
                 IncludeLaunchDescription(
                     XMLLaunchDescriptionSource(rosbridge_launch_path),
                     condition=UnlessCondition(LaunchConfiguration('foxglove')), 
@@ -209,4 +190,3 @@ def generate_launch_description():
                     name='rosboard'),
             ]),
     ])
->>>>>>> c1bb969 (update launch file)
