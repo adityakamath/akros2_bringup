@@ -16,7 +16,7 @@ import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, ExecuteProcess
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -42,21 +42,24 @@ def generate_launch_description():
     rosbridge_launch_path = PathJoinSubstitution(
         [FindPackageShare('rosbridge_server'), 'launch', 'rosbridge_websocket_launch.xml'])
     
-    return LaunchDescription([       
-        DeclareLaunchArgument(
-            name='drive_ns',
-            default_value='drive',
-            description='Namespace for the Drive subsystem'),
-        
+    foxglove_launch_path = PathJoinSubstitution(
+        [FindPackageShare('foxglove_bridge'), 'launch', 'foxglove_bridge_launch.xml'])
+    
+    return LaunchDescription([ 
         DeclareLaunchArgument(
             name='drive',
             default_value='True',
             description='Enable Drive'),
         
         DeclareLaunchArgument(
+            name='drive_ns',
+            default_value='drive',
+            description='Namespace for the Drive subsystem'),
+        
+        DeclareLaunchArgument(
             name='joy',
-            default_value='ps4',
-            description='Select controller: ps4, ps3, stadia'),
+            default_value='ps3',
+            description='Select controller: ps3/sixaxis, ps4, stadia, sn30pro'),
         
         DeclareLaunchArgument(
             name='description',
@@ -69,14 +72,14 @@ def generate_launch_description():
             description='Switch between measured (joint_states) / required (req_states) Joint States'),
         
         DeclareLaunchArgument(
-            name='lidar_ns',
-            default_value='lidar',
-            description='Namespace for the LIDAR component'),
-        
-        DeclareLaunchArgument(
             name='lidar',
             default_value='True',
             description='Enable LIDAR'),
+        
+        DeclareLaunchArgument(
+            name='lidar_ns',
+            default_value='lidar',
+            description='Namespace for the LIDAR component'),
         
         DeclareLaunchArgument(
             name='lidar_port',
@@ -84,11 +87,17 @@ def generate_launch_description():
             description='LIDAR Port Address'),
         
         DeclareLaunchArgument(
+            name='t265',
+            default_value='false',
+            description='Enable T265'),
+        
+        DeclareLaunchArgument(
             name='tracking_ns',
             default_value='t265',
             description='Namespace for the Tracking Camera component'),
         
         DeclareLaunchArgument(
+<<<<<<< HEAD
             name='t265',
             default_value='True',
             description='Enable T265'),
@@ -97,6 +106,16 @@ def generate_launch_description():
             name='rosbridge',
             default_value='True',
             description='Enable ROSBridge Server'),
+=======
+            name='viz',
+            default_value='false',
+            description='Enable Visualization'),
+        
+        DeclareLaunchArgument(
+            name='foxglove',
+            default_value='true',
+            description='Enable Foxglove Server'),
+>>>>>>> c1bb969 (update launch file)
         
         DeclareLaunchArgument(
             name='rosboard',
@@ -139,7 +158,7 @@ def generate_launch_description():
                     remappings=[
                         (['/scan'], ['/', LaunchConfiguration('lidar_ns'), '/scan']),
                         (['/scan_filtered'], ['/', LaunchConfiguration('lidar_ns'), '/scan_filtered'])
-                    ])
+                    ]),
             ]),
         
         IncludeLaunchDescription(
@@ -156,13 +175,38 @@ def generate_launch_description():
                               'linear_accel_cov': '0.001',
                               'unite_imu_method': '2'}.items()), #linear-interpolation
         
-        IncludeLaunchDescription(
-            XMLLaunchDescriptionSource(rosbridge_launch_path),
-            condition=IfCondition(LaunchConfiguration('rosbridge'))),
+        GroupAction(
+            condition=IfCondition(LaunchConfiguration('viz')),
+            actions = [
+                IncludeLaunchDescription(
+                    XMLLaunchDescriptionSource(foxglove_launch_path),
+                    condition=IfCondition(LaunchConfiguration('foxglove')),
+                    launch_arguments={
+                        'port': '8765',
+                        'use_compression': 'true',
+                    }.items()),
         
+<<<<<<< HEAD
         Node(
             condition=IfCondition(LaunchConfiguration('rosboard')),
             package='rosboard',
             executable='rosboard_node',
             name='rosboard'),
     ])
+=======
+                IncludeLaunchDescription(
+                    XMLLaunchDescriptionSource(rosbridge_launch_path),
+                    condition=UnlessCondition(LaunchConfiguration('foxglove')), 
+                    launch_arguments={
+                        'port': '9090',
+                        'use_compression': 'true',
+                    }.items()),
+                
+                Node(
+                    condition=IfCondition(LaunchConfiguration('rosboard')),
+                    package='rosboard',
+                    executable='rosboard_node',
+                    name='rosboard'),
+            ]),
+    ])
+>>>>>>> c1bb969 (update launch file)
