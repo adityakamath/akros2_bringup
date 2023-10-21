@@ -62,12 +62,12 @@ def generate_launch_description():
             description='Select controller: ps3/sixaxis, ps4, stadia, sn30pro'),
         
         DeclareLaunchArgument(
-            name='description',
+            name='desc',
             default_value='true',
             description='Enable URDF description'),
         
         DeclareLaunchArgument(
-            name='joint_state_topic',
+            name='js_topic',
             default_value='joint_states',
             description='Switch between measured (joint_states) / required (req_states) Joint States'),
         
@@ -119,10 +119,10 @@ def generate_launch_description():
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(description_launch_path),
-            condition=IfCondition(LaunchConfiguration('description')),
+            condition=IfCondition(LaunchConfiguration('desc')),
             launch_arguments={'uros_ns': LaunchConfiguration('drive_ns'),
                               'uros': LaunchConfiguration('drive'),
-                              'joint_state_topic': LaunchConfiguration('joint_state_topic')}.items()),
+                              'joint_state_topic': LaunchConfiguration('js_topic')}.items()),
         
         GroupAction(
             condition=IfCondition(LaunchConfiguration('lidar')),
