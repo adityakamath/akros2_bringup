@@ -118,5 +118,6 @@ def generate_launch_description():
                 ('/teleop_vel', '/joy_vel'),
                 ('/auto_vel', '/nav_vel'),
                 ('/mix_vel', '/cmd_vel'),
+                ('/mode', '/drive/mode'), # temporary, to be removed once micro-ros remapping is done
             ]),
     ])

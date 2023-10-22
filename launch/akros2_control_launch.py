@@ -32,13 +32,5 @@ def generate_launch_description():
             executable='micro_ros_agent',
             name='micro_ros_agent',
             output='screen',
-            arguments=['serial', '--dev', '/dev/ttyTEENSY'],
-            remappings=[
-                ('/drive/cmd_vel', '/joy_vel'), # temporary, change to /cmd_vel once twist_mixer is fixed
-                ('/drive/mode', '/mode'),
-                ('/drive/imu', '/imu'),
-                ('/drive/joint_states', '/joint_states'),
-                ('/drive/odom', '/odom'),
-                ('/drive/req_states', '/req_states'),
-            ]),
+            arguments=['serial', '--dev', '/dev/ttyTEENSY']),
     ])
