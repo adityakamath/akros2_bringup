@@ -31,6 +31,9 @@ def generate_launch_description():
     
     basestation_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'akros2_basestation_launch.py'])
+
+    control_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_bringup'), 'launch', 'akros2_control_launch.py'])
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -62,6 +65,11 @@ def generate_launch_description():
             name='remote',
             default_value='True',
             description='If True, Teleop/Visualization disabled (only Twist Mixer is enabled), needs to be run remotely. If False, launch on-board Teleop/Visualization'),
+
+        DeclareLaunchArgument(
+            name='control',
+            default_value='True',
+            description='Enable Low-Level Control'),
         
         DeclareLaunchArgument(
             name='js_topic',
@@ -120,4 +128,9 @@ def generate_launch_description():
                 ('/mix_vel', '/cmd_vel'),
                 ('/mode', '/drive/mode'), # temporary, to be removed once micro-ros remapping is done
             ]),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(control_launch_path),
+            condition=UnlessCondition(LaunchConfiguration('control')),
+            launch_arguments={'config': LaunchConfiguration('config')}.items()),
     ])
