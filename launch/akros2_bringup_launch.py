@@ -116,9 +116,8 @@ def generate_launch_description():
             name='twist_mixer',
             output='screen',
             remappings=[
-                ('/teleop_vel', '/drive/joy_vel'),
-                ('/auto_vel', '/drive/nav_vel'),
-                ('/mix_vel', '/drive/cmd_vel'),
-                ('/mode', '/drive/mode'),
+                ('/teleop_vel', '/joy_vel'),
+                ('/auto_vel', '/nav_vel'),
+                ('/mix_vel', '/cmd_vel'),
             ]),
     ])
