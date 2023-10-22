@@ -33,12 +33,6 @@ def generate_launch_description():
     basestation_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'akros2_basestation_launch.py'])
     
-    laser_filter_node = Node(
-        package="laser_filters",
-        executable="scan_to_scan_filter_chain",
-        name="laser_filter_node",
-        parameters=[laser_filter_config_path])
-    
     return LaunchDescription([
         DeclareLaunchArgument(
             name='config',
@@ -101,12 +95,11 @@ def generate_launch_description():
                                 {'range_threshold': 0.005}
                     ]),
                 
-                laser_filter_node,
-                
-                RegisterEventHandler(
-                    event_handler=OnProcessExit(
-                        target_action=laser_filter_node,
-                        on_exit=[Shutdown()])),
+                Node(
+                    package='laser_filters',
+                    executable='scan_to_scan_filter_chain',
+                    name='laser_filter_node',
+                    parameters=[laser_filter_config_path]),
             ]),
         
         IncludeLaunchDescription(
@@ -127,5 +120,5 @@ def generate_launch_description():
                 ('/auto_vel', '/drive/nav_vel'),
                 ('/mix_vel', '/drive/cmd_vel'),
                 ('/mode', '/drive/mode'),
-            ]),  
+            ]),
     ])

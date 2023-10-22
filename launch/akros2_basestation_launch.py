@@ -40,7 +40,7 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             name='joy_config',
-            default_value='sn39pro',
+            default_value='sn30pro',
             description='Select Controller: ps3/sixaxis, ps4, stadia, sn30pro'),
         
         DeclareLaunchArgument(
