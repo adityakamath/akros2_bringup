@@ -33,10 +33,11 @@ def generate_launch_description():
     basestation_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'akros2_basestation_launch.py'])
     
-    laser_filter_node = Node(package="laser_filters",
-                             executable="scan_to_scan_filter_chain",
-                             name="laser_filter_node",
-                             parameters=[laser_filter_config_path])
+    laser_filter_node = Node(
+        package="laser_filters",
+        executable="scan_to_scan_filter_chain",
+        name="laser_filter_node",
+        parameters=[laser_filter_config_path])
     
     return LaunchDescription([
         DeclareLaunchArgument(
