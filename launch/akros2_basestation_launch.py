@@ -52,7 +52,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(drive_launch_path),
             launch_arguments={'remote': LaunchConfiguration('remote'),
                               'twist_joy': 'true',
-                              'drive': 'true'
+                              'drive': 'true',
                               'joy_config': LaunchConfiguration('joy_config')}.items()),
         
         IncludeLaunchDescription(
