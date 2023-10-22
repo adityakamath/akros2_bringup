@@ -14,8 +14,7 @@
 
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, RegisterEventHandler, Shutdown
-from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
