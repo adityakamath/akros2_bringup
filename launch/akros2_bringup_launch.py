@@ -131,6 +131,6 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(control_launch_path),
-            condition=UnlessCondition(LaunchConfiguration('control')),
+            condition=IfCondition(LaunchConfiguration('control')),
             launch_arguments={'config': LaunchConfiguration('config')}.items()),
     ])
