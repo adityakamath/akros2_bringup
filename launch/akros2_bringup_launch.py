@@ -123,7 +123,7 @@ def generate_launch_description():
             name='twist_mixer',
             output='screen',
             remappings=[
-                ('/teleop_vel', '/joy_vel'),
+                ('/teleop_vel', '/drive/cmd_vel'),  #change from /drive/cmd_vel to  /joy_vel once micro-ros remapping and twist_mixer issues are fixed
                 ('/auto_vel', '/nav_vel'),
                 ('/mix_vel', '/cmd_vel'),
                 ('/mode', '/drive/mode'), # temporary, to be removed once micro-ros remapping is done
