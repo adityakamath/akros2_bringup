@@ -18,44 +18,19 @@ from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition, LaunchConfigurationEquals
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
 
-def generate_launch_description():   
-    imu_filter_config_dynamic_path = [get_package_share_directory('akros2_bringup'), 
-                                     '/config/', 
-                                     LaunchConfiguration('config'), 
-                                     '_imu_filter_config.yaml']
-    
+def generate_launch_description():       
     return LaunchDescription([ 
         DeclareLaunchArgument(
             name='config',
             default_value='mecanum',
             description='Select Robot Config: mecanum (4 wheeled), omni (3 wheeled)'),
         
-        DeclareLaunchArgument(
-            name='imu_filter',
-            default_value='True',
-            description='Enable IMU Madgwick Filter from IMU Tools'),
-        
-        GroupAction(
+        Node(
             condition=LaunchConfigurationEquals('config', 'mecanum'),
-            actions = [
-                Node(
-                    package='micro_ros_agent',
-                    executable='micro_ros_agent',
-                    name='micro_ros_agent',
-                    output='screen',
-                    arguments=['serial', '--dev', '/dev/ttyTEENSY']),
-                
-                Node(
-                    condition=IfCondition(LaunchConfiguration('imu_filter')),
-                    package='imu_filter_madgwick',
-                    executable='imu_filter_madgwick_node',
-                    name='imu_filter',
-                    output='screen',
-                    parameters=[imu_filter_config_dynamic_path],
-                    remappings=[
-                        ('/imu/data_raw', '/drive/imu'),  #change from /drive/imu to  /imu once micro-ros remapping is done
-                        ('/imu/data', '/imu/filtered')]),
-            ]),
+            package='micro_ros_agent',
+            executable='micro_ros_agent',
+            name='micro_ros_agent',
+            output='screen',
+            arguments=['serial', '--dev', '/dev/ttyTEENSY']),
     ])
