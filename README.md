@@ -12,6 +12,7 @@ This is the main launch file that is run on the robot, and can be configured wit
 * ```lidar```: Enable/Disable the launch of the Laser packages: [ldlidar](https://github.com/linorobot/ldlidar), [laser_filters](https://github.com/ros-perception/laser_filters) (Default: ```True```)
 * ```remote```: If False, enable the launch of the Base Station launch file: [akros2_basestation_launch.py](https://github.com/adityakamath/akros2_bringup/blob/humble/launch/akros2_basestation_launch.py). If True, only the [```twist_mixer``` node](https://github.com/adityakamath/akros2_drive/blob/humble/akros2_drive/twist_mixer_node.py) is launched on the robot, everything else is disabled (Default: ```True```). 
 * ```control```: If True, enables low-level control using the Control launch file: [akros2_control_launch.py](https://github.com/adityakamath/akros2_bringup/blob/humble/launch/akros2_bringup_launch.py)
+* ```imu_filter```: If True, enables the IMU Madgwick Filter from the Control launch file: [akros2_control_launch.py](https://github.com/adityakamath/akros2_bringup/blob/humble/launch/akros2_bringup_launch.py)
 * ```js_topic```: Choose whether to report measured joint states ```joint_states```, or required joint states ```req_states``` (Default: ```joint_states```)
 * ```js_ext```: If True, enables joint states from external nodes (like a [micro-ROS node](https://github.com/adityakamath/akros2_firmware/tree/akros2_humble)). If False, enables joint states from the joint_state_publisher (Default: ```True```)
 
@@ -26,5 +27,6 @@ This is the base station launch file and is meant to be either launched separate
 This is the low-level control launch file that is meant to be either launched separately on the robot, or from within the main launch using the ```control``` launch argument. This launch files launches specific low-level control nodes based on config. For example, for the mecanum configuration, it launches the [micro-ROS agent](https://github.com/micro-ROS/micro-ROS-Agent) with the correct arguments. The config is the only launch argument for this file:
 
 * ```config```: Launches specific low-level control nodes based on the configs: ```mecanum```, ```omni``` (Default: ```mecanum```)
+* ```imu_filter```: Launches the [IMU Madgwick Filter](https://github.com/CCNYRoboticsLab/imu_tools/tree/humble/imu_filter_madgwick) node using ```config```-specific parameter files.
 
 Note: For now, it is not recommended to launch the low level control for the mecanum configuration from within the main launch file. The mecanum configuration as mentioned above uses the micro-ROS agent, which for some reason keeps dropping connection and reconnecting to the micro-ROS client periodically. When this launch file is run separately (```control:=false``` when running the main launch file), this problem does not occur.

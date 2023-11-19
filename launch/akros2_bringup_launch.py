@@ -62,6 +62,11 @@ def generate_launch_description():
             description='Enable LIDAR'),
         
         DeclareLaunchArgument(
+            name='lidar_filter',
+            default_value='True',
+            description='Enable LIDAR Filter Chain'),
+        
+        DeclareLaunchArgument(
             name='remote',
             default_value='True',
             description='If True, Teleop/Visualization disabled (only Twist Mixer is enabled), needs to be run remotely. If False, launch on-board Teleop/Visualization'),
@@ -72,6 +77,11 @@ def generate_launch_description():
             description='Enable Low-Level Control'),
         
         DeclareLaunchArgument(
+            name='imu_filter',
+            default_value='True',
+            description='Enable IMU Madgwick Filter from IMU Tools'),
+        
+        DeclareLaunchArgument(
             name='js_topic',
             default_value='joint_states',
             description='Select Joint States Topic: joint_states (measured), req_states (required)'),
@@ -80,13 +90,6 @@ def generate_launch_description():
             name='js_ext',
             default_value='True',
             description='Enable Joint States from external nodes (like the micro-ROS node). If False, enable Joint States from the Joint State Publisher'),
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(description_launch_path),
-            condition=IfCondition(LaunchConfiguration('desc')),
-            launch_arguments={'config': LaunchConfiguration('config'),
-                              'js_ext': LaunchConfiguration('js_ext'),
-                              'js_topic': LaunchConfiguration('js_topic')}.items()),
         
         GroupAction(
             condition=IfCondition(LaunchConfiguration('lidar')),
@@ -103,18 +106,12 @@ def generate_launch_description():
                     ]),
                 
                 Node(
+                    condition=IfCondition(LaunchConfiguration('lidar_filter')),
                     package='laser_filters',
                     executable='scan_to_scan_filter_chain',
                     name='laser_filter_node',
                     parameters=[laser_filter_config_path]),
             ]),
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(basestation_launch_path),
-            condition=UnlessCondition(LaunchConfiguration('remote')),
-            launch_arguments={'remote': LaunchConfiguration('remote'),
-                              'joy_config': LaunchConfiguration('joy_config'),
-                              'viz_config': LaunchConfiguration('viz_config')}.items()),
         
         Node(
             condition=IfCondition(LaunchConfiguration('remote')),
@@ -128,9 +125,24 @@ def generate_launch_description():
                 ('/mix_vel', '/cmd_vel'),
                 ('/mode', '/drive/mode'), # temporary, to be removed once micro-ros remapping is done
             ]),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(description_launch_path),
+            condition=IfCondition(LaunchConfiguration('desc')),
+            launch_arguments={'config': LaunchConfiguration('config'),
+                              'js_ext': LaunchConfiguration('js_ext'),
+                              'js_topic': LaunchConfiguration('js_topic')}.items()),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(basestation_launch_path),
+            condition=UnlessCondition(LaunchConfiguration('remote')),
+            launch_arguments={'remote': LaunchConfiguration('remote'),
+                              'joy_config': LaunchConfiguration('joy_config'),
+                              'viz_config': LaunchConfiguration('viz_config')}.items()),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(control_launch_path),
             condition=IfCondition(LaunchConfiguration('control')),
-            launch_arguments={'config': LaunchConfiguration('config')}.items()),
+            launch_arguments={'config': LaunchConfiguration('config'),
+                              'imu_filter': LaunchConfiguration('imu_filter')}.items()),
     ])
