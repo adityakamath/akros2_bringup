@@ -5,15 +5,21 @@ ROS2 package to bringup the AKROS2 robot with different configurations - Mecanum
 ## bringup_launch.py
 This is the main launch file that is run on the robot, and can be configured with the following launch arguments:
 
-* ```config```: Configures robot platform: ```mecanum``` (4-wheeled) or ```omni``` (3-wheeled) (Default: ```mecanum```)
+* ```config```: Selects robot configuration: ```mecanum``` (4-wheeled) or ```omni``` (3-wheeled) (Default: ```mecanum```)
 * ```joy_config```: Configures joystick mapping: ```ps3``` ([PS3/Sixaxis](https://en.wikipedia.org/wiki/Sixaxis)), ```ps4``` ([PS4](https://www.playstation.com/nl-nl/accessories/dualshock-4-wireless-controller/), ```stadia``` ([Stadia](https://stadia.google.com/controller/)), ```sn30pro``` ([8BitDo SN30 Pro](https://www.8bitdo.com/sn30-pro-g-classic-or-sn30-pro-sn/)) (Default: ```ps3```)
-* ```viz_config```: Configures visualization websocket for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) or [ROSBoard](https://github.com/adityakamath/rosboard): ```foxglove``` ([foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge)), ```rosbridge``` ([rosbridge_server]([rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite/tree/ros2/rosbridge_server/launch)), ```rosboard``` or ```none``` (disabled) (Default: ```foxglove```) (Note: for rosboard, a personal fork is used, with the port number changed to 8000 instead of 8888, because 8888 is used by Jupyterlab in my environment. It also has some small (warning) fixes for Humble.)
+* ```viz_config```: Selects one of the following visualization configs (Default: ```foxglove```): 
+    * ```foxglove```: Launches [foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:8765)
+    * ```rosbridge```: Launches [rosbridge_server]([rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite/tree/ros2/rosbridge_server/launch) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:9000)
+    * ```rosboard```: Launches [ROSBoard](https://github.com/adityakamath/rosboard) server (localhost:8000)
+    * ```rviz```: Launches [RViz2](https://github.com/ros2/rviz) locally on the machine with the default configuration in ```rviz/default.rviz``` in this repository.
+    * ```none```:  Disabled
+  (Note: for rosboard, a personal fork is used, with the port number changed to 8000 instead of 8888, because 8888 is used by Jupyterlab in my environment. It also has some small (warning) fixes for Humble.)
 * ```desc```: Enable/Disable the launch of Description related packages: from [description_launch.py](https://github.com/adityakamath/akros2_description) (Default: ```True```)
 * ```laser```: Enable/Disable Laser packages in the Laser launch file: [laser_launch.py](https://github.com/adityakamath/akros2_bringup/blob/humble/launch/laser_launch.py) (Default: ```True```)
 * ```drive```: Enable/Disable Drive packages in the Drive launch file: [drive_launch.py](https://github.com/adityakamath/akros2_drive/blob/humble/launch/drive_launch.py) (Default: ```True```)
 * ```joy```: Enable/Disable Joy related packages in the Joy launch file: [joy_launch.py](https://github.com/adityakamath/akros2_drive/blob/humble/launch/joy_launch.py) (Default: ```True```)
 * ```control```: Enable/Disable low-level control using the Control launch file: [control_launch.py](https://github.com/adityakamath/akros2_bringup/blob/humble/launch/control_launch.py) (Default: ```True```)
-* ```fusion```: Enable/Disable the Sensor Fusion related packages: [IMU Madgwick Filter](https://github.com/CCNYRoboticsLab/imu_tools/tree/humble/imu_filter_madgwick) using ```config``` specific arguments (Default: ```True```)
+* ```fusion```: Enable/Disable the Sensor Fusion related packages using ```config``` specific arguments (Default: ```True```)
 * ```js_topic```: Choose whether to report measured joint states ```joint_states```, or required joint states ```req_states``` (Default: ```joint_states```)
 * ```js_ext```: If True, enables joint states from external nodes (like a [micro-ROS node](https://github.com/adityakamath/akros2_firmware/tree/akros2_humble)). If False, enables joint states from the joint_state_publisher (Default: ```True```)
 
@@ -29,6 +35,11 @@ This is the low-level control launch file that is meant to be either launched se
 * ```config```: Launches specific low-level control nodes based on the configs: ```mecanum```, ```omni``` (Default: ```mecanum```)
 
 Note: For now, it is not recommended to launch the low level control for the mecanum configuration from within the main launch file. The mecanum configuration runs the micro-ROS agent, which for some reason keeps dropping connection and reconnecting to the micro-ROS client periodically. When this launch file is run separately (```control:=false``` when running the main launch file), this problem does not occur.
+
+## fusion_launch.py
+This launch file runs the sensor fusion nodes: currently only the [IMU Madgwick Filter](https://github.com/CCNYRoboticsLab/imu_tools/tree/humble/imu_filter_madgwick). There is one launch argument that is used to select the robot configuration:
+
+* ```config```: Same as in ```bringup_launch.py``` (Default: ```mecanum```)
 
 ## laser_launch.py
 This launch file runs the [ldlidar](https://github.com/linorobot/ldlidar) and [laser_filters](https://github.com/ros-perception/laser_filters) packages. It has only one launch argument:
