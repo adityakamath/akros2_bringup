@@ -14,14 +14,11 @@
 
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from ament_index_python.packages import get_package_share_directory
-from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 def generate_launch_description():
     desc_launch_path = PathJoinSubstitution(
@@ -29,6 +26,9 @@ def generate_launch_description():
     
     laser_launch_path = PathJoinSubstitution(
         [FindPackageShare("akros2_bringup"), 'launch', 'laser_launch.py'])
+    
+    fusion_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_bringup'), 'launch', 'fusion_launch.py'])
     
     viz_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
@@ -38,11 +38,6 @@ def generate_launch_description():
 
     control_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'control_launch.py'])
-    
-    imu_filter_config_dynamic_path = [get_package_share_directory('akros2_bringup'), 
-                                     '/config/', 
-                                     LaunchConfiguration('config'), 
-                                     '_imu_filter_config.yaml']
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -71,6 +66,11 @@ def generate_launch_description():
             description='Enable LIDAR'),
         
         DeclareLaunchArgument(
+            name='fusion',
+            default_value='True',
+            description='Enable Sensor Fusion Nodes'),
+        
+        DeclareLaunchArgument(
             name='drive',
             default_value='True',
             description='Enable Drive Nodes'),
@@ -86,11 +86,6 @@ def generate_launch_description():
             description='Enable Low-Level Control'),
         
         DeclareLaunchArgument(
-            name='fusion',
-            default_value='True',
-            description='Enable Sensor Fusion Nodes'),
-        
-        DeclareLaunchArgument(
             name='js_topic',
             default_value='joint_states',
             description='Select Joint States Topic: joint_states (measured), req_states (required)'),
@@ -101,27 +96,6 @@ def generate_launch_description():
             description='Enable Joint States from external nodes (like the micro-ROS node). If False, enable Joint States from the Joint State Publisher'),
         
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(laser_launch_path),
-            condition=IfCondition(LaunchConfiguration('laser'))),
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_launch_path),
-            condition=IfCondition(LaunchConfiguration('drive')),
-            launch_arguments={'joy': LaunchConfiguration('joy'),
-                              'joy_config': LaunchConfiguration('joy_config')}.items()),
-        
-        Node(
-            condition=IfCondition(LaunchConfiguration('fusion')),
-            package='imu_filter_madgwick',
-            executable='imu_filter_madgwick_node',
-            name='imu_filter',
-            output='screen',
-            parameters=[imu_filter_config_dynamic_path],
-            remappings=[
-                ('/imu/data_raw', '/drive/imu'),  #change from /drive/imu to  /imu once micro-ros remapping is done
-                ('/imu/data', '/imu/filtered')]),
-        
-        IncludeLaunchDescription(
             PythonLaunchDescriptionSource(desc_launch_path),
             condition=IfCondition(LaunchConfiguration('desc')),
             launch_arguments={'config': LaunchConfiguration('config'),
@@ -129,8 +103,23 @@ def generate_launch_description():
                               'js_topic': LaunchConfiguration('js_topic')}.items()),
         
         IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(laser_launch_path),
+            condition=IfCondition(LaunchConfiguration('laser'))),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(fusion_launch_path),
+            condition=IfCondition(LaunchConfiguration('fusion')),
+            launch_arguments={'config': LaunchConfiguration('config')}.items()),
+        
+        IncludeLaunchDescription(
             PythonLaunchDescriptionSource(viz_launch_path),
             launch_arguments={'viz_config': LaunchConfiguration('viz_config')}.items()),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(drive_launch_path),
+            condition=IfCondition(LaunchConfiguration('drive')),
+            launch_arguments={'joy': LaunchConfiguration('joy'),
+                              'joy_config': LaunchConfiguration('joy_config')}.items()),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(control_launch_path),
