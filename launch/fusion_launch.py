@@ -39,6 +39,6 @@ def generate_launch_description():
             output='screen',
             parameters=[imu_filter_config_dynamic_path],
             remappings=[
-                ('/imu/data_raw', '/drive/imu'),  #change from /drive/imu to  /imu once micro-ros remapping is done
+                ('/imu/data_raw', '/drive/imu'),  #change from /drive/imu to /imu once micro-ros remapping is done
                 ('/imu/data', '/imu/filtered')]),
     ])
