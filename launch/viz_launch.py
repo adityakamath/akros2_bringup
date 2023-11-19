@@ -14,46 +14,25 @@
 
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.substitutions import PathJoinSubstitution
 from launch.conditions import LaunchConfigurationEquals
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
-def generate_launch_description():
-    drive_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_drive'), 'launch', 'akros2_drive_launch.py'])
-    
+def generate_launch_description():   
     rosbridge_launch_path = PathJoinSubstitution(
         [FindPackageShare('rosbridge_server'), 'launch', 'rosbridge_websocket_launch.xml'])
     
     foxglove_launch_path = PathJoinSubstitution(
         [FindPackageShare('foxglove_bridge'), 'launch', 'foxglove_bridge_launch.xml'])
     
-    return LaunchDescription([
-        DeclareLaunchArgument(
-            name='remote',
-            default_value='True',
-            description='Launch only Joy Mode Handler (if Drive is enabled). If False, launches both Twist Mixer and Joy Mode Handler nodes'),
-        
-        DeclareLaunchArgument(
-            name='joy_config',
-            default_value='sn30pro',
-            description='Select Controller: ps3/sixaxis, ps4, stadia, sn30pro'),
-        
+    return LaunchDescription([       
         DeclareLaunchArgument(
             name='viz_config',
             default_value='none',
             description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rosboard (ROSBoard), none (Disabled)'),
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_launch_path),
-            launch_arguments={'remote': LaunchConfiguration('remote'),
-                              'twist_joy': 'true',
-                              'drive': 'true',
-                              'joy_config': LaunchConfiguration('joy_config')}.items()),
         
         IncludeLaunchDescription(
             XMLLaunchDescriptionSource(foxglove_launch_path),

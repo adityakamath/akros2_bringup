@@ -23,17 +23,20 @@ from launch_ros.substitutions import FindPackageShare
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 def generate_launch_description():
-    description_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_description'), 'launch', 'akros2_description_launch.py'])
+    desc_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_description'), 'launch', 'description_launch.py'])
     
-    laser_filter_config_path = PathJoinSubstitution(
-        [FindPackageShare("akros2_bringup"), "config", "laser_filter_config.yaml"])
+    laser_launch_path = PathJoinSubstitution(
+        [FindPackageShare("akros2_bringup"), 'launch', 'laser_launch.py'])
     
-    basestation_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_bringup'), 'launch', 'akros2_basestation_launch.py'])
+    viz_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
+    
+    drive_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_drive'), 'launch', 'drive_launch.py'])
 
     control_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_bringup'), 'launch', 'akros2_control_launch.py'])
+        [FindPackageShare('akros2_bringup'), 'launch', 'control_launch.py'])
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -57,29 +60,24 @@ def generate_launch_description():
             description='Enable URDF Description'),
         
         DeclareLaunchArgument(
-            name='lidar',
+            name='laser',
             default_value='True',
             description='Enable LIDAR'),
         
         DeclareLaunchArgument(
-            name='lidar_filter',
+            name='drive',
             default_value='True',
-            description='Enable LIDAR Filter Chain'),
+            description='Enable Drive Nodes'),
         
         DeclareLaunchArgument(
-            name='remote',
+            name='joy',
             default_value='True',
-            description='If True, Teleop/Visualization disabled (only Twist Mixer is enabled), needs to be run remotely. If False, launch on-board Teleop/Visualization'),
+            description='Enable Joy, Teleop Twist Joy, Mode Handler'),
 
         DeclareLaunchArgument(
             name='control',
             default_value='True',
             description='Enable Low-Level Control'),
-        
-        DeclareLaunchArgument(
-            name='imu_filter',
-            default_value='True',
-            description='Enable IMU Madgwick Filter from IMU Tools'),
         
         DeclareLaunchArgument(
             name='js_topic',
@@ -91,58 +89,29 @@ def generate_launch_description():
             default_value='True',
             description='Enable Joint States from external nodes (like the micro-ROS node). If False, enable Joint States from the Joint State Publisher'),
         
-        GroupAction(
-            condition=IfCondition(LaunchConfiguration('lidar')),
-            actions = [
-                Node(
-                    package='ldlidar',
-                    executable='ldlidar',
-                    name='laser_node',
-                    output='screen',
-                    parameters=[{'serial_port': '/dev/ttyLIDAR'},
-                                {'topic_name': 'scan'},
-                                {'lidar_frame': 'laser_frame'},
-                                {'range_threshold': 0.005}
-                    ]),
-                
-                Node(
-                    condition=IfCondition(LaunchConfiguration('lidar_filter')),
-                    package='laser_filters',
-                    executable='scan_to_scan_filter_chain',
-                    name='laser_filter_node',
-                    parameters=[laser_filter_config_path]),
-            ]),
-        
-        Node(
-            condition=IfCondition(LaunchConfiguration('remote')),
-            package='akros2_drive',
-            executable='twist_mixer',
-            name='twist_mixer',
-            output='screen',
-            remappings=[
-                ('/teleop_vel', '/drive/cmd_vel'),  #change from /drive/cmd_vel to  /joy_vel once micro-ros remapping and twist_mixer issues are fixed
-                ('/auto_vel', '/nav_vel'),
-                ('/mix_vel', '/cmd_vel'),
-                ('/mode', '/drive/mode'), # temporary, to be removed once micro-ros remapping is done
-            ]),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(laser_launch_path),
+            condition=IfCondition(LaunchConfiguration('laser'))),
         
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(description_launch_path),
+            PythonLaunchDescriptionSource(drive_launch_path),
+            condition=IfCondition(LaunchConfiguration('drive')),
+            launch_arguments={'joy': LaunchConfiguration('joy'),
+                              'joy_config': LaunchConfiguration('joy_config')}.items()),
+        
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(desc_launch_path),
             condition=IfCondition(LaunchConfiguration('desc')),
             launch_arguments={'config': LaunchConfiguration('config'),
                               'js_ext': LaunchConfiguration('js_ext'),
                               'js_topic': LaunchConfiguration('js_topic')}.items()),
         
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(basestation_launch_path),
-            condition=UnlessCondition(LaunchConfiguration('remote')),
-            launch_arguments={'remote': LaunchConfiguration('remote'),
-                              'joy_config': LaunchConfiguration('joy_config'),
-                              'viz_config': LaunchConfiguration('viz_config')}.items()),
+            PythonLaunchDescriptionSource(viz_launch_path),
+            launch_arguments={'viz_config': LaunchConfiguration('viz_config')}.items()),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(control_launch_path),
             condition=IfCondition(LaunchConfiguration('control')),
-            launch_arguments={'config': LaunchConfiguration('config'),
-                              'imu_filter': LaunchConfiguration('imu_filter')}.items()),
+            launch_arguments={'config': LaunchConfiguration('config')}.items()),
     ])
