@@ -22,9 +22,14 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     
     imu_filter_config_dynamic_path = [get_package_share_directory('akros2_bringup'), 
-                                     '/config/', 
-                                     LaunchConfiguration('config'), 
-                                     '_imu_filter_config.yaml']
+                                      '/config/akros2_', 
+                                      LaunchConfiguration('config'), 
+                                      '/imu_filter_config.yaml']
+    
+    ekf_config_dynamic_path = [get_package_share_directory('akros2_bringup'), 
+                               '/config/akros2_', 
+                               LaunchConfiguration('config'), 
+                               '/ekf_config.yaml']
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -41,4 +46,13 @@ def generate_launch_description():
             remappings=[
                 ('/imu/data_raw', '/drive/imu'),  #change from /drive/imu to /imu once micro-ros remapping is done
                 ('/imu/data', '/imu/filtered')]),
+        
+        Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[ekf_config_dynamic_path],
+            remappings=[
+                ('/cmd_vel', '/drive/cmd_vel')]), #remove remapping once micro-ros remapping is done
     ])

@@ -7,7 +7,7 @@ imu_filter:
     fixed_frame: "imu_odom"
     constant_dt: 0.0
     publish_debug_topics: false
-    world_frame: "ned"
+    world_frame: "enu"
     remove_gravity_vector: false
     gain: 0.1
     zeta: 0.0
