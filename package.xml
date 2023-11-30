@@ -11,13 +11,10 @@
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
-
-  <depend>laser_filters</depend>
-  <depend>ldlidar</depend>
   
   <depend>akros2_drive</depend>
   <depend>akros2_description</depend>
-  <depend>akros2_navigation</depend>
+  <depend>akros2_base</depend>
 
   <depend>micro_ros_agent</depend>
 

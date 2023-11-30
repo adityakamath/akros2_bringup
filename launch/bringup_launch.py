@@ -25,19 +25,19 @@ def generate_launch_description():
         [FindPackageShare('akros2_description'), 'launch', 'description_launch.py'])
     
     laser_launch_path = PathJoinSubstitution(
-        [FindPackageShare("akros2_bringup"), 'launch', 'laser_launch.py'])
+        [FindPackageShare("akros2_base"), 'launch', 'laser_launch.py'])
     
     fusion_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_navigation'), 'launch', 'sensor_fusion_launch.py'])
-    
-    viz_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
+        [FindPackageShare('akros2_base'), 'launch', 'sensor_fusion_launch.py'])
     
     drive_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_drive'), 'launch', 'drive_launch.py'])
 
     control_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'control_launch.py'])
+    
+    viz_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
     
     return LaunchDescription([
         DeclareLaunchArgument(

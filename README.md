@@ -36,11 +36,6 @@ This is the low-level control launch file that is meant to be either launched se
 
 Note: For now, it is not recommended to launch the low level control for the mecanum configuration from within the main launch file. The mecanum configuration runs the micro-ROS agent, which for some reason keeps dropping connection and reconnecting to the micro-ROS client periodically. When this launch file is run separately (```control:=false``` when running the main launch file), this problem does not occur.
 
-## laser_launch.py
-This launch file runs the [ldlidar](https://github.com/linorobot/ldlidar) and [laser_filters](https://github.com/ros-perception/laser_filters) packages. It has only one launch argument:
-
-* ```laser_filter```: Enable/Disable the LIDAR filter chain (Default: ```True```)
-
 ## viz_launch.py
 This launch file runs the correct visualization package based on the only launch argument:
 
