@@ -67,7 +67,7 @@ def generate_launch_description():
             name='laser',
             default_value='True',
             description='Enable LIDAR'),
-        
+
         DeclareLaunchArgument(
             name='camera',
             default_value='True',
