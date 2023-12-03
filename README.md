@@ -15,11 +15,12 @@ This is the main launch file that is run on the robot, and can be configured wit
     * ```none```:  Disabled
   (Note: for rosboard, a personal fork is used, with the port number changed to 8000 instead of 8888, because 8888 is used by Jupyterlab in my environment. It also has some small (warning) fixes for Humble.)
 * ```desc```: Enable/Disable the launch of Description related packages: from [akros2_description/description_launch.py](https://github.com/adityakamath/akros2_description) (Default: ```True```)
-* ```laser```: Enable/Disable Laser packages in the Laser launch file: [laser_launch.py](https://github.com/adityakamath/akros2_bringup/blob/humble/launch/laser_launch.py) (Default: ```True```)
+* ```laser```: Enable/Disable Laser packages in the Laser launch file: [laser_launch.py](https://github.com/adityakamath/akros2_base/blob/humble/launch/laser_launch.py) (Default: ```True```)
+* ```camera```: Enable/Disable Camera packages in the Camera launch file: [camera_launch.py](https://github.com/adityakamath/akros2_base/blob/humble/launch/camera_launch.py) (Default: ```True```)
 * ```drive```: Enable/Disable Drive packages in the Drive launch file: [drive_launch.py](https://github.com/adityakamath/akros2_drive/blob/humble/launch/drive_launch.py) (Default: ```True```)
 * ```joy```: Enable/Disable Joy related packages in the Joy launch file: [joy_launch.py](https://github.com/adityakamath/akros2_drive/blob/humble/launch/joy_launch.py) (Default: ```True```)
 * ```control```: Enable/Disable low-level control using the Control launch file: [control_launch.py](https://github.com/adityakamath/akros2_bringup/blob/humble/launch/control_launch.py) (Default: ```True```)
-* ```fusion```: Enable/Disable the Sensor Fusion related packages with ```config``` specific arguments using the Sensor Fusion launch file: [akros2_navigation/sensor_fusion_launch.py](https://github.com/adityakamath/akros2_navigation/blob/humble/launch/sensor_fusion_launch.py) (Default: ```True```)
+* ```fusion```: Enable/Disable the Sensor Fusion related packages with ```config``` specific arguments using the Sensor Fusion launch file: [akros2_base/sensor_fusion_launch.py](https://github.com/adityakamath/akros2_base/blob/humble/launch/sensor_fusion_launch.py) (Default: ```True```)
 * ```js_topic```: Choose whether to report measured joint states ```joint_states```, or required joint states ```req_states``` (Default: ```joint_states```)
 * ```js_ext```: If True, enables joint states from external nodes (like a [micro-ROS node](https://github.com/adityakamath/akros2_firmware/tree/akros2_humble)). If False, enables joint states from the joint_state_publisher (Default: ```True```)
 
