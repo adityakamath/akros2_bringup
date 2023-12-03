@@ -26,6 +26,9 @@ def generate_launch_description():
     
     laser_launch_path = PathJoinSubstitution(
         [FindPackageShare("akros2_base"), 'launch', 'laser_launch.py'])
+
+    camera_launch_path = PathJoinSubstitution(
+        [FindPackageShare("akros2_base"), 'launch', 'camera_launch.py'])
     
     fusion_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_base'), 'launch', 'sensor_fusion_launch.py'])
@@ -105,6 +108,11 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(laser_launch_path),
             condition=IfCondition(LaunchConfiguration('laser'))),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(camera_launch_path),
+            condition=IfCondition(LaunchConfiguration('camera')),
+            launch_arguments={'config': LaunchConfiguration('config')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(fusion_launch_path),
