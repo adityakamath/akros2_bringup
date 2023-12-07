@@ -16,8 +16,6 @@
   <depend>akros2_description</depend>
   <depend>akros2_base</depend>
 
-  <depend>micro_ros_agent</depend>
-
   <depend>foxglove_bridge</depend>
   <depend>rosbridge_server</depend>
   <depend>rosboard</depend>
