@@ -116,7 +116,8 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(camera_launch_path),
-            condition=IfCondition(LaunchConfiguration('camera'))),
+            condition=IfCondition(LaunchConfiguration('camera')),
+            launch_arguments={'config': LaunchConfiguration('config')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(fusion_launch_path),
