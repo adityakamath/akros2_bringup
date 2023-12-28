@@ -6,6 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Odometry1
+        - /Odometry1/Status1
         - /RobotModel1
         - /Imu1/Axes properties1
         - /ImuFiltered1/Axes properties1
@@ -68,7 +70,7 @@ Visualization Manager:
           Scale: 1
           Value: true
         Value: true
-      Enabled: false
+      Enabled: true
       Keep: 100
       Name: Odometry
       Position Tolerance: 0.10000000149011612
@@ -88,8 +90,8 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /drive/odom
-      Value: false
+        Value: /odometry/filtered
+      Value: true
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
@@ -186,9 +188,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 242
+      Max Intensity: 244
       Min Color: 0; 0; 0
-      Min Intensity: 84
+      Min Intensity: 210
       Name: LaserScan
       Position Transformer: XYZ
       Selectable: true
@@ -310,8 +312,6 @@ Visualization Manager:
           Value: true
         imu_link:
           Value: true
-        imu_odom:
-          Value: true
         laser_frame:
           Value: true
         laser_link:
@@ -339,8 +339,7 @@ Visualization Manager:
             {}
           imu_link:
             imu_frame:
-              imu_odom:
-                {}
+              {}
           nav_link:
             laser_link:
               laser_frame:
@@ -358,7 +357,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_link
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -401,7 +400,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.7562205791473389
+      Distance: 0.9324141144752502
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
