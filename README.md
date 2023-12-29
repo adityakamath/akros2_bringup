@@ -6,7 +6,7 @@ ROS2 package to bringup the AKROS2 robot with different configurations - Mecanum
 This is the main launch file that is run on the robot, and can be configured with the following launch arguments:
 
 * ```config```: Selects robot configuration: ```mecanum``` (4-wheeled) or ```omni``` (3-wheeled) (Default: ```mecanum```)
-* ```joy_config```: Configures joystick mapping: ```ps3``` ([PS3/Sixaxis](https://en.wikipedia.org/wiki/Sixaxis)), ```ps4``` ([PS4](https://www.playstation.com/nl-nl/accessories/dualshock-4-wireless-controller/), ```stadia``` ([Stadia](https://stadia.google.com/controller/)), ```sn30pro``` ([8BitDo SN30 Pro](https://www.8bitdo.com/sn30-pro-g-classic-or-sn30-pro-sn/)) (Default: ```ps3```)
+* ```joy_config```: Configures joystick mapping: ```ps4``` ([PS4](https://www.playstation.com/nl-nl/accessories/dualshock-4-wireless-controller/), ```stadia``` ([Stadia](https://stadia.google.com/controller/)), ```sn30pro``` ([8BitDo SN30 Pro](https://www.8bitdo.com/sn30-pro-g-classic-or-sn30-pro-sn/)), ```steamdeck```([Steam Deck](https://store.steampowered.com/steamdeck)) (Default: ```steamdeck```)
 * ```viz_config```: Selects one of the following visualization configs (Default: ```foxglove```): 
     * ```foxglove```: Launches [foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:8765)
     * ```rosbridge```: Launches [rosbridge_server]([rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite/tree/ros2/rosbridge_server/launch) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:9000)
@@ -29,7 +29,7 @@ This is the main launch file that is run on the robot, and can be configured wit
 ## basestation_launch.py
 This is the base station launch file and is meant to be launched separately on-board the robot or from a remote device terminal. While running the basestation, make sure to run the ```bringup_launch.py``` with ```joy:=false``` and ```viz_config:=none```. This launch file can be configured using the following launch arguments:
 
-* ```joy_config```: Same as in ```bringup_launch.py``` (Default: ```sn30pro```)
+* ```joy_config```: Same as in ```bringup_launch.py``` (Default: ```steamdeck```)
 * ```viz_config```: Same as in ```bringup_launch.py``` (Default: ```foxglove```)
 
 ## viz_launch.py
