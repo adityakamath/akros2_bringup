@@ -37,7 +37,7 @@ def generate_launch_description():
         [FindPackageShare('akros2_base'), 'launch', 'sensor_fusion_launch.py'])
     
     drive_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_drive'), 'launch', 'drive_launch.py'])
+        [FindPackageShare('akros2_base'), 'launch', 'drive_launch.py'])
     
     viz_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])

@@ -23,7 +23,7 @@ import logging
 
 def generate_launch_description():
     joy_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_drive'), 'launch', 'joy_launch.py'])
+        [FindPackageShare('akros2_base'), 'launch', 'joy_launch.py'])
     
     viz_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
