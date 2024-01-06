@@ -38,6 +38,9 @@ def generate_launch_description():
     
     drive_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_base'), 'launch', 'drive_launch.py'])
+
+    joy_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_base'), 'launch', 'joy_launch.py'])
     
     viz_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
@@ -108,11 +111,6 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(laser_launch_path),
             condition=IfCondition(LaunchConfiguration('laser'))),
-
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(camera_launch_path),
-            condition=IfCondition(LaunchConfiguration('camera')),
-            launch_arguments={'config': LaunchConfiguration('config')}.items()),
         
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(fusion_launch_path),
@@ -120,13 +118,21 @@ def generate_launch_description():
             launch_arguments={'config': LaunchConfiguration('config')}.items()),
         
         IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(drive_launch_path),
+            condition=IfCondition(LaunchConfiguration('drive'))),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(joy_launch_path),
+            launch_arguments={'joy_config': LaunchConfiguration('joy_config')}.items()),
+
+        IncludeLaunchDescription(
             PythonLaunchDescriptionSource(viz_launch_path),
             launch_arguments={'viz_config': LaunchConfiguration('viz_config')}.items()),
-        
+
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_launch_path),
-            condition=IfCondition(LaunchConfiguration('drive')),
-            launch_arguments={'joy_config': LaunchConfiguration('joy_config')}.items()),
+            PythonLaunchDescriptionSource(camera_launch_path),
+            condition=IfCondition(LaunchConfiguration('camera')),
+            launch_arguments={'config': LaunchConfiguration('config')}.items()),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(control_launch_path),

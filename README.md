@@ -28,7 +28,12 @@ This is the main launch file that is run on the robot, and can be configured wit
 * ```js_topic```: Choose whether to report measured joint states ```joint_states```, or required joint states ```req_states``` (Default: ```joint_states```)
 * ```js_ext```: If True, enables joint states from external nodes (like a [micro-ROS node](https://github.com/adityakamath/akros2_firmware/tree/akros2_humble)). If False, enables joint states from the joint_state_publisher (Default: ```True```)
 
-**Note:** Due to issues with launching everything together, it is recommended to launch ```bringup_launch.py``` with ```control:=false camera:=false```. The Control launch file and the Camera launch file should be launched separately on different terminals.
+## bringup_local_launch.py
+This is nearly the same as ```bringup_launch.py```, the only difference is that it uses the ```drive_node_launch.py``` instead of ```drive_launch.py``` and ```joy_launch.py``` separately. More info in the [akros2_base](https://github.com/adityakamath/akros2_base) repository.
+
+
+**Note:** Due to issues with launching everything together, it is recommended to launch ```bringup_launch.py``` and ```bringup_local_launch.py``` with ```control:=false camera:=false```. The Control launch file and the Camera launch file should be launched separately on different terminals.
+
 
 ## basestation_launch.py
 This is the base station launch file and is meant to be launched separately on-board the robot or from a remote device terminal. While running the basestation, make sure to run the ```bringup_launch.py``` with ```joy_config:=none``` and ```viz_config:=none```. This launch file can be configured using the following launch arguments:
