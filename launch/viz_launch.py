@@ -29,7 +29,7 @@ def generate_launch_description():
         [FindPackageShare('foxglove_bridge'), 'launch', 'foxglove_bridge_launch.xml'])
 
     rviz_config = PathJoinSubstitution(
-        [FindPackageShare('akros2_bringup'), 'rviz', 'default.rviz'])
+        [FindPackageShare('akros2_bringup'), 'viz', 'default.rviz'])
     
     return LaunchDescription([       
         DeclareLaunchArgument(
