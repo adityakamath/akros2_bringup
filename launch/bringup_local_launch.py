@@ -83,6 +83,12 @@ def generate_launch_description():
             default_value='True',
             description='Enable Joint States from external nodes (like the micro-ROS node). If False, enable Joint States from the Joint State Publisher'),
         
+        # Launch drive_node first, then run bringup. The joy_config and drive launch configuration value is reset when they are hard-coded while launching bringup
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(drive_node_launch_path),
+            condition=IfCondition(LaunchConfiguration('drive')),
+            launch_arguments={'joy_config': LaunchConfiguration('joy_config')}.items()),
+        
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(bringup_launch_path),
             launch_arguments={'config': LaunchConfiguration('config'),
@@ -96,9 +102,4 @@ def generate_launch_description():
                               'control': LaunchConfiguration('control'),
                               'js_ext': LaunchConfiguration('js_ext'),
                               'js_topic': LaunchConfiguration('js_topic')}.items()),
-        
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_node_launch_path),
-            condition=IfCondition(LaunchConfiguration('drive')),
-            launch_arguments={'joy_config': LaunchConfiguration('joy_config')}.items()),
     ])
