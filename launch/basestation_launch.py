@@ -32,7 +32,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name='joy_config',
             default_value='steamdeck',
-            description='Select Controller: ps4, stadia, sn30pro, steamdeck'),
+            description='Select Controller: ps4 (PS4/DS4), stadia (Google Stadia), sn30pro (8BitDo SN30 Pro), steamdeck (Valve Steam Deck), none (Disabled)'),
         
         DeclareLaunchArgument(
             name='viz_config',
