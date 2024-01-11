@@ -7,14 +7,14 @@ This is the main launch file that is run on the robot, and can be configured wit
 
 * ```config```: Selects robot configuration: ```mecanum``` (4-wheeled) or ```omni``` (3-wheeled) (Default: ```mecanum```)
 * ```joy_config```: Configures one of the following joystick mappings for launching related packages (Default: ```steamdeck```): 
-    * ```ps4```: [PS4](https://www.playstation.com/nl-nl/accessories/dualshock-4-wireless-controller/)/DS4 Controller
+    * ```ps4```: [PS4 DualShock4](https://www.playstation.com/nl-nl/accessories/dualshock-4-wireless-controller/) Controller
     * ```stadia```: [Google Stadia](https://stadia.google.com/controller/) Controller
     * ```sn30pro``` [8BitDo SN30 Pro](https://www.8bitdo.com/sn30-pro-g-classic-or-sn30-pro-sn/) Controller
     * ```steamdeck```: [Valve Steam Deck](https://store.steampowered.com/steamdeck)
     * ```none```: Disabled
 * ```viz_config```: Selects one of the following visualization configs for launching related packages (Default: ```foxglove```): 
     * ```foxglove```: Launches [foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:8765)
-    * ```rosbridge```: Launches [rosbridge_server]([rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite/tree/ros2/rosbridge_server/launch) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:9000)
+    * ```rosbridge```: Launches [rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite/tree/ros2/rosbridge_server/launch) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:9000)
     * ```rosboard```: Launches [ROSBoard](https://github.com/adityakamath/rosboard) server (localhost:8000)
     * ```rviz```: Launches [RViz2](https://github.com/ros2/rviz) locally on the machine with the default configuration in ```rviz/default.rviz``` in this repository.
     * ```none```:  Disabled
