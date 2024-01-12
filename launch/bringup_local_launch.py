@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
@@ -23,31 +22,31 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     bringup_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'bringup_launch.py'])
-    
+
     drive_node_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_base'), 'launch', 'drive_node_launch.py'])
-    
+        [FindPackageShare('akros2_drive'), 'launch', 'drive_launch.py'])
+
     return LaunchDescription([
         DeclareLaunchArgument(
             name='config',
             default_value='mecanum',
             description='Select Robot Config: mecanum (4 wheeled), omni (3 wheeled)'),
-        
+
         DeclareLaunchArgument(
             name='joy_config',
             default_value='steamdeck',
             description='Select Controller: ps4 (PS4/DS4), stadia (Google Stadia), sn30pro (8BitDo SN30 Pro), steamdeck (Valve Steam Deck), none (Disabled)'),
-        
+
         DeclareLaunchArgument(
             name='viz_config',
             default_value='none',
             description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rosboard (ROSBoard), rviz (RViz Config), none (Disabled)'),
-        
+
         DeclareLaunchArgument(
             name='desc',
             default_value='True',
             description='Enable URDF Description'),
-        
+
         DeclareLaunchArgument(
             name='laser',
             default_value='True',
@@ -57,38 +56,39 @@ def generate_launch_description():
             name='camera',
             default_value='True',
             description='Enable Camera'),
-        
+
         DeclareLaunchArgument(
             name='control',
             default_value='True',
             description='Enable Low-Level Control'),
-        
+
         DeclareLaunchArgument(
             name='fusion',
             default_value='True',
             description='Enable Sensor Fusion Nodes'),
-        
+
         DeclareLaunchArgument(
             name='drive',
             default_value='True',
-            description='Enable Drive Nodes'),
-        
+            description='Enable Drive and Teleop Nodes'),
+
         DeclareLaunchArgument(
             name='js_topic',
             default_value='joint_states',
             description='Select Joint States Topic: joint_states (measured), req_states (required)'),
-        
+
         DeclareLaunchArgument(
             name='js_ext',
             default_value='True',
             description='Enable Joint States from external nodes (like the micro-ROS node). If False, enable Joint States from the Joint State Publisher'),
-        
-        # Launch drive_node first, then run bringup. The joy_config and drive launch configuration value is reset when they are hard-coded while launching bringup
+
+        # Launch drive_node first, then run bringup, otherwise there are errors
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drive_node_launch_path),
             condition=IfCondition(LaunchConfiguration('drive')),
-            launch_arguments={'joy_config': LaunchConfiguration('joy_config')}.items()),
-        
+            launch_arguments={'joy_config': LaunchConfiguration('joy_config'),
+                              'executor': 'True'}.items()),
+
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(bringup_launch_path),
             launch_arguments={'config': LaunchConfiguration('config'),

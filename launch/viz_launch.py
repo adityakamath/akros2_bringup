@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
@@ -21,17 +20,17 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
-def generate_launch_description():   
+def generate_launch_description():
     rosbridge_launch_path = PathJoinSubstitution(
         [FindPackageShare('rosbridge_server'), 'launch', 'rosbridge_websocket_launch.xml'])
-    
+
     foxglove_launch_path = PathJoinSubstitution(
         [FindPackageShare('foxglove_bridge'), 'launch', 'foxglove_bridge_launch.xml'])
 
     rviz_config = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'viz', 'default.rviz'])
-    
-    return LaunchDescription([       
+
+    return LaunchDescription([
         DeclareLaunchArgument(
             name='viz_config',
             default_value='none',
@@ -41,7 +40,7 @@ def generate_launch_description():
             name='use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
-        
+
         IncludeLaunchDescription(
             XMLLaunchDescriptionSource(foxglove_launch_path),
             condition=LaunchConfigurationEquals('viz_config', 'foxglove'),
@@ -49,7 +48,7 @@ def generate_launch_description():
                 'port': '8765',
                 'use_compression': 'true',
             }.items()),
-        
+
         IncludeLaunchDescription(
             XMLLaunchDescriptionSource(rosbridge_launch_path),
             condition=LaunchConfigurationEquals('viz_config', 'rosbridge'),
@@ -57,13 +56,13 @@ def generate_launch_description():
                 'port': '9090',
                 'use_compression': 'true',
             }.items()),
-        
+
         Node(
             condition=LaunchConfigurationEquals('viz_config', 'rosboard'),
             package='rosboard',
             executable='rosboard_node',
             name='rosboard'),
-        
+
         Node(
             condition=LaunchConfigurationEquals('viz_config', 'rviz'),
             package='rviz2',

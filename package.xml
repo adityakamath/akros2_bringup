@@ -12,8 +12,8 @@
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
 
-  <depend>akros2_description</depend>
   <depend>akros2_base</depend>
+  <depend>akros2_description</depend>
 
   <depend>foxglove_bridge</depend>
   <depend>rosbridge_server</depend>
