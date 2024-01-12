@@ -18,7 +18,7 @@ This is the main launch file that is run on the robot, and can be configured wit
     * ```rosboard```: Launches [ROSBoard](https://github.com/adityakamath/rosboard) server (localhost:8000)
     * ```rviz```: Launches [RViz2](https://github.com/ros2/rviz) locally on the machine with the default configuration in ```rviz/default.rviz``` in this repository.
     * ```none```:  Disabled
-  (Note: for rosboard, a personal fork is used, with the port number changed to 8000 instead of 8888, because 8888 is used by Jupyterlab in my environment. It also has some small (warning) fixes for Humble.)
+  (*Note*: for rosboard, a personal fork is used, with the port number changed to 8000 instead of 8888, because 8888 is used by Jupyterlab in my environment. It also has some small (warning) fixes for Humble.)
 * ```desc```: Enable/Disable the launch of Description related packages: from [akros2_description/description_launch.py](https://github.com/adityakamath/akros2_description) (Default: ```True```)
 * ```laser```: Enable/Disable Laser packages in the Laser launch file: [laser_launch.py](https://github.com/adityakamath/akros2_base/blob/humble/launch/laser_launch.py) (Default: ```True```)
 * ```camera```: Enable/Disable Camera packages in the Camera launch file: [camera_launch.py](https://github.com/adityakamath/akros2_base/blob/humble/launch/camera_launch.py) (Default: ```True```)
@@ -29,7 +29,7 @@ This is the main launch file that is run on the robot, and can be configured wit
 * ```js_ext```: If True, enables joint states from external nodes (like a [micro-ROS node](https://github.com/adityakamath/akros2_firmware/tree/akros2_humble)). If False, enables joint states from the joint_state_publisher (Default: ```True```)
 
 ## bringup_local_launch.py
-This is nearly the same as ```bringup_launch.py```, the only difference is that it runs the [drive_node.py](https://github.com/adityakamath/akros2_drive/blob/humble/akros2_drive/drive_node.py) from [akros2_drive](https://github.com/adityakamath/akros2_drive) instead of running ```drive_launch.py``` and ```teleop_launch.py``` separately. More info in the [akros2_base](https://github.com/adityakamath/akros2_base) repository.
+This is nearly the same as ```bringup_launch.py```, the only difference is that it runs the [drive_node.py](https://github.com/adityakamath/akros2_drive/blob/humble/akros2_drive/drive_node.py) node from [akros2_drive](https://github.com/adityakamath/akros2_drive) instead of running the ```drive_launch.py``` and ```teleop_launch.py``` launch files separately. More info in the [akros2_base](https://github.com/adityakamath/akros2_base) repository.
 
 ## Note:
 Note that due to issues with launching everything together, it is recommended to launch ```bringup_launch.py``` and ```bringup_local_launch.py``` with ```control:=false camera:=false```. The Control launch file and the Camera launch file should be launched separately on different terminals.
