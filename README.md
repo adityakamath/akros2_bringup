@@ -11,7 +11,7 @@ This is the main launch file that is run on the robot, and can be configured wit
     * ```stadia```: [Google Stadia](https://stadia.google.com/controller/) Controller
     * ```sn30pro``` [8BitDo SN30 Pro](https://www.8bitdo.com/sn30-pro-g-classic-or-sn30-pro-sn/) Controller
     * ```steamdeck```: [Valve Steam Deck](https://store.steampowered.com/steamdeck)
-    * ```none```: Disabled
+    * ```none```: Disabled (All packages that need the joystick are disabled, for example: [teleop_launch.py](https://github.com/adityakamath/akros2_base/blog/humble/launch/teleop_launch.py))
 * ```viz_config```: Selects one of the following visualization configs for launching related packages (Default: ```foxglove```):
     * ```foxglove```: Launches [foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:8765)
     * ```rosbridge```: Launches [rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite/tree/ros2/rosbridge_server/launch) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:9000)
@@ -29,7 +29,7 @@ This is the main launch file that is run on the robot, and can be configured wit
 * ```js_ext```: If True, enables joint states from external nodes (like a [micro-ROS node](https://github.com/adityakamath/akros2_firmware/tree/akros2_humble)). If False, enables joint states from the joint_state_publisher (Default: ```True```)
 
 ## bringup_local_launch.py
-This is nearly the same as ```bringup_launch.py```, the only difference is that it uses the ```drive_node_launch.py``` instead of ```drive_launch.py``` and ```joy_launch.py``` separately. More info in the [akros2_base](https://github.com/adityakamath/akros2_base) repository.
+This is nearly the same as ```bringup_launch.py```, the only difference is that it runs the [drive_node.py](https://github.com/adityakamath/akros2_drive/blob/humble/akros2_drive/drive_node.py) from [akros2_drive](https://github.com/adityakamath/akros2_drive) instead of running ```drive_launch.py``` and ```teleop_launch.py``` separately. More info in the [akros2_base](https://github.com/adityakamath/akros2_base) repository.
 
 ## Note:
 Note that due to issues with launching everything together, it is recommended to launch ```bringup_launch.py``` and ```bringup_local_launch.py``` with ```control:=false camera:=false```. The Control launch file and the Camera launch file should be launched separately on different terminals.
