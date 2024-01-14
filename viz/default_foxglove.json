@@ -2,10 +2,28 @@
   "layout": {
     "first": {
       "first": {
-        "first": "Image!1rxq7wm",
-        "second": "RawMessages!4hlc4x8",
+        "first": {
+          "first": "RawMessages!3euseuh",
+          "second": "Indicator!fxujwa",
+          "direction": "column",
+          "splitPercentage": 100
+        },
+        "second": {
+          "first": "RawMessages!43gzrku",
+          "second": {
+            "first": "Indicator!2c1zzh8",
+            "second": {
+              "first": "Indicator!322h4yb",
+              "second": "Indicator!2068rwm",
+              "direction": "column"
+            },
+            "direction": "column",
+            "splitPercentage": 0
+          },
+          "direction": "row"
+        },
         "direction": "column",
-        "splitPercentage": 62.63537906137184
+        "splitPercentage": 52.33812949640287
       },
       "second": {
         "first": "Indicator!c1pjyp",
@@ -13,13 +31,15 @@
         "direction": "row"
       },
       "direction": "column",
-      "splitPercentage": 78.47025495750708
+      "splitPercentage": 78.75354107648725
     },
     "second": "3D!2rdqaqe",
     "direction": "row",
-    "splitPercentage": 29.333333333333332
+    "splitPercentage": 22.421875
   },
-  "globalVariables": {},
+  "globalVariables": {
+    "globalVariable": 0
+  },
   "userNodes": {
     "16b48e01-b738-419b-939b-1ddc50c709d0": {
       "sourceCode": "import { Input, Messages } from \"ros\";\n\ntype Output = {};\ntype GlobalVariables = { id: number };\n\nexport const inputs = [];\nexport const output = \"/webviz_node/\";\n\n// Populate 'Input' with a parameter to properly type your inputs, e.g. 'Input<\"/your_input_topic\">'\nconst publisher = (message: Input<>, globalVars: GlobalVariables): Output => {\n  return {};\n};\n\nexport default publisher;",
@@ -33,74 +53,78 @@
     "timeDisplayMethod": "ROS"
   },
   "configById": {
-    "Image!1rxq7wm": {
-      "cameraState": {
-        "distance": 20,
-        "perspective": true,
-        "phi": 60,
-        "target": [
-          0,
-          0,
-          0
-        ],
-        "targetOffset": [
-          0,
-          0,
-          0
-        ],
-        "targetOrientation": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "thetaOffset": 45,
-        "fovy": 45,
-        "near": 0.5,
-        "far": 5000
-      },
-      "followMode": "follow-pose",
-      "scene": {
-        "enableStats": true,
-        "ignoreColladaUpAxis": false
-      },
-      "transforms": {
-        "frame:cam_frame": {
-          "visible": false
-        }
-      },
-      "topics": {
-        "/scan": {
-          "visible": false
-        },
-        "/scan_filtered": {
-          "visible": false
-        },
-        "/robot_description": {
-          "visible": false
-        }
-      },
-      "layers": {},
-      "publish": {
-        "type": "point",
-        "poseTopic": "/move_base_simple/goal",
-        "pointTopic": "/clicked_point",
-        "poseEstimateTopic": "/initialpose",
-        "poseEstimateXDeviation": 0.5,
-        "poseEstimateYDeviation": 0.5,
-        "poseEstimateThetaDeviation": 0.26179939
-      },
-      "imageMode": {
-        "imageTopic": "/image_raw/compressed",
-        "synchronize": false
-      }
-    },
-    "RawMessages!4hlc4x8": {
+    "RawMessages!3euseuh": {
       "diffEnabled": false,
       "diffMethod": "custom",
-      "diffTopicPath": "/odometry",
+      "diffTopicPath": "",
       "showFullMessageForDiff": false,
       "topicPath": "/cmd_vel"
+    },
+    "Indicator!fxujwa": {
+      "path": "/joy.buttons[5]",
+      "style": "bulb",
+      "fallbackColor": "#a0a0a0",
+      "fallbackLabel": "Off",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#68e24a",
+          "label": "On"
+        }
+      ],
+      "foxglovePanelTitle": "Throttle"
+    },
+    "RawMessages!43gzrku": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/joy_vel"
+    },
+    "Indicator!2c1zzh8": {
+      "path": "/joy.buttons[5]",
+      "style": "bulb",
+      "fallbackColor": "#a0a0a0",
+      "fallbackLabel": "False",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "true",
+          "color": "#68e24a",
+          "label": "True"
+        }
+      ],
+      "foxglovePanelTitle": "Turbo"
+    },
+    "Indicator!322h4yb": {
+      "path": "/joy.buttons[5]",
+      "style": "background",
+      "fallbackColor": "#a0a0a0",
+      "fallbackLabel": "Off",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#68e24a",
+          "label": "On"
+        }
+      ],
+      "foxglovePanelTitle": "Turbo"
+    },
+    "Indicator!2068rwm": {
+      "path": "/in_motion",
+      "style": "background",
+      "fallbackColor": "#a0a0a0",
+      "fallbackLabel": "Stopped",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "True",
+          "color": "#68e24a",
+          "label": "Moving"
+        }
+      ]
     },
     "Indicator!c1pjyp": {
       "path": "/mode.estop",
@@ -114,7 +138,8 @@
           "color": "#ff0000",
           "label": "Stop"
         }
-      ]
+      ],
+      "foxglovePanelTitle": "E-Stop"
     },
     "Indicator!3gmwnz2": {
       "path": "/mode.auto_t",
@@ -128,18 +153,19 @@
           "color": "#0037ff",
           "label": "Auto"
         }
-      ]
+      ],
+      "foxglovePanelTitle": "Mode"
     },
     "3D!2rdqaqe": {
       "cameraState": {
         "perspective": true,
-        "distance": 2.5009022472834275,
-        "phi": 57.51485019773281,
-        "thetaOffset": 42.60355035019528,
+        "distance": 2.5016437687854505,
+        "phi": 69.23082652909065,
+        "thetaOffset": 3.1952663265267325,
         "targetOffset": [
-          0.05384329810383111,
-          0.008305790852268765,
-          -3.6121766009341635e-17
+          -0.4984631324312217,
+          0.026207643288393565,
+          -8.353336698265347e-18
         ],
         "target": [
           0,
@@ -175,10 +201,10 @@
           "visible": false
         },
         "frame:base_link": {
-          "visible": true
+          "visible": false
         },
         "frame:base_footprint": {
-          "visible": false
+          "visible": true
         },
         "frame:base_link_inertial": {
           "visible": false
@@ -247,6 +273,15 @@
         },
         "frame:imu_frame": {
           "visible": false
+        },
+        "frame:cam_frame": {
+          "visible": false
+        },
+        "frame:cam_link": {
+          "visible": false
+        },
+        "frame:imu_odom": {
+          "visible": false
         }
       },
       "topics": {
@@ -288,11 +323,13 @@
           "explicitAlpha": 0.20000000000000015
         },
         "/scan_filtered": {
-          "visible": true,
+          "visible": false,
           "colorField": "_auto_distance",
           "colorMode": "colormap",
           "colorMap": "rainbow",
-          "pointSize": 5
+          "pointSize": 5,
+          "minValue": -1,
+          "maxValue": 1
         },
         "/lidar/scan_filtered": {
           "visible": false,
@@ -357,7 +394,7 @@
         "poseEstimateYDeviation": 0.5,
         "poseEstimateThetaDeviation": 0.26179939
       },
-      "followTf": "base_link",
+      "followTf": "base_footprint",
       "imageMode": {}
     }
   }
