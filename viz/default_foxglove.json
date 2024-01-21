@@ -35,7 +35,7 @@
     },
     "second": "3D!2rdqaqe",
     "direction": "row",
-    "splitPercentage": 22.421875
+    "splitPercentage": 38.13387423935091
   },
   "globalVariables": {
     "globalVariable": 0
@@ -159,13 +159,13 @@
     "3D!2rdqaqe": {
       "cameraState": {
         "perspective": true,
-        "distance": 2.5016437687854505,
-        "phi": 69.23082652909065,
-        "thetaOffset": 3.1952663265267325,
+        "distance": 0.9936887246411851,
+        "phi": 73.30195724069367,
+        "thetaOffset": -169.2282434375184,
         "targetOffset": [
-          -0.4984631324312217,
-          0.026207643288393565,
-          -8.353336698265347e-18
+          0.05347234893294273,
+          0.08696406742822253,
+          -4.655019301938313e-19
         ],
         "target": [
           0,
@@ -185,12 +185,14 @@
       "followMode": "follow-pose",
       "scene": {
         "meshUpAxis": "z_up",
-        "labelScaleFactor": 0.20000000000000015,
+        "labelScaleFactor": 0.2,
         "enableStats": true,
         "syncCamera": false,
         "ignoreColladaUpAxis": true,
         "transforms": {
-          "editable": true
+          "editable": true,
+          "labelSize": 0.1,
+          "axisScale": 0.5
         }
       },
       "transforms": {
@@ -213,7 +215,7 @@
           "visible": false
         },
         "frame:laser_link": {
-          "visible": false
+          "visible": true
         },
         "frame:laser_frame": {
           "visible": false
@@ -282,6 +284,15 @@
         },
         "frame:imu_odom": {
           "visible": false
+        },
+        "frame:wheel_f": {
+          "visible": false
+        },
+        "frame:wheel_l": {
+          "visible": false
+        },
+        "frame:wheel_r": {
+          "visible": false
         }
       },
       "topics": {
@@ -323,7 +334,7 @@
           "explicitAlpha": 0.20000000000000015
         },
         "/scan_filtered": {
-          "visible": false,
+          "visible": true,
           "colorField": "_auto_distance",
           "colorMode": "colormap",
           "colorMap": "rainbow",
@@ -383,6 +394,22 @@
           "layerId": "foxglove.Urdf",
           "url": "https://raw.githubusercontent.com/adityakamath/akros_3d_assets/akros2_urdf/akros2_mecanum/robot.urdf",
           "order": 2
+        },
+        "0febdaaf-f4fa-4367-ab9b-c308cced0b4d": {
+          "visible": false,
+          "frameLocked": true,
+          "label": "Omni",
+          "instanceId": "0febdaaf-f4fa-4367-ab9b-c308cced0b4d",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "url",
+          "url": "https://raw.githubusercontent.com/adityakamath/akros_3d_assets/akros2_urdf/akros2_omni/robot.urdf",
+          "filePath": "",
+          "parameter": "",
+          "topic": "",
+          "framePrefix": "",
+          "displayMode": "auto",
+          "fallbackColor": "#ffffff",
+          "order": 3
         }
       },
       "publish": {
@@ -394,7 +421,7 @@
         "poseEstimateYDeviation": 0.5,
         "poseEstimateThetaDeviation": 0.26179939
       },
-      "followTf": "base_footprint",
+      "followTf": "base_link",
       "imageMode": {}
     }
   }
