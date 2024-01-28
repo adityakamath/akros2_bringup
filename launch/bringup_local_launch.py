@@ -81,8 +81,7 @@ def generate_launch_description():
             name='js_ext',
             default_value='True',
             description='Enable Joint States from external nodes (like the micro-ROS node). If False, enable Joint States from the Joint State Publisher'),
-
-        # Launch drive_node first, then run bringup, otherwise there are errors
+        
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(drive_node_launch_path),
             condition=IfCondition(LaunchConfiguration('drive')),
