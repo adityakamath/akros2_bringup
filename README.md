@@ -1,11 +1,11 @@
 # akros2_bringup
-ROS2 package to bringup the AKROS2 robot with different configurations - Mecanum Drive (4 wheeled), Omni-Wheel Drive (3 wheeled)
+ROS2 package to bringup the AKROS2 robot with different configurations - Mecanum Drive (4 wheeled), Omni-Wheel Drive (3 wheeled), Differential Drive (2 wheeled)
 
 
 ## bringup_launch.py
 This is the main launch file that is run on the robot, and can be configured with the following launch arguments:
 
-* ```config```: Selects robot configuration: ```mecanum``` (4-wheeled) or ```omni``` (3-wheeled) (Default: ```mecanum```)
+* ```config```: Selects robot configuration: ```mecanum``` (4-wheeled), ```omni``` (3-wheeled) or ```diff``` (2-wheeled) (Default: ```mecanum```)
 * ```joy_config```: Configures one of the following joystick mappings for launching related packages (Default: ```steamdeck```):
     * ```ps4```: [PS4 DualShock4](https://www.playstation.com/nl-nl/accessories/dualshock-4-wireless-controller/) Controller
     * ```stadia```: [Google Stadia](https://stadia.google.com/controller/) Controller
