@@ -23,8 +23,8 @@ def generate_launch_description():
     bringup_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'bringup_launch.py'])
 
-    drive_node_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_drive'), 'launch', 'drive_launch.py'])
+    teleop_node_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_teleop'), 'launch', 'teleop_launch.py'])
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -68,9 +68,9 @@ def generate_launch_description():
             description='Enable Sensor Fusion Nodes'),
 
         DeclareLaunchArgument(
-            name='drive',
+            name='teleop',
             default_value='True',
-            description='Enable Drive and Teleop Nodes'),
+            description='Enable Teleop Nodes'),
 
         DeclareLaunchArgument(
             name='js_topic',
@@ -83,8 +83,8 @@ def generate_launch_description():
             description='Enable Joint States from external nodes (like the micro-ROS node). If False, enable Joint States from the Joint State Publisher'),
         
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_node_launch_path),
-            condition=IfCondition(LaunchConfiguration('drive')),
+            PythonLaunchDescriptionSource(teleop_node_launch_path),
+            condition=IfCondition(LaunchConfiguration('teleop')),
             launch_arguments={'joy_config': LaunchConfiguration('joy_config'),
                               'executor': 'True'}.items()),
 
@@ -96,7 +96,7 @@ def generate_launch_description():
                               'desc': LaunchConfiguration('desc'),
                               'laser': LaunchConfiguration('laser'),
                               'fusion': LaunchConfiguration('fusion'),
-                              'drive': 'False',
+                              'teleop': 'False',
                               'camera': LaunchConfiguration('camera'),
                               'control': LaunchConfiguration('control'),
                               'js_ext': LaunchConfiguration('js_ext'),

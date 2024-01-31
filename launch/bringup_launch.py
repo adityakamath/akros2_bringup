@@ -35,11 +35,11 @@ def generate_launch_description():
     fusion_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_base'), 'launch', 'sensor_fusion_launch.py'])
 
-    drive_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_base'), 'launch', 'drive_launch.py'])
-
     teleop_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_base'), 'launch', 'teleop_launch.py'])
+
+    mixer_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_base'), 'launch', 'twist_mixer_launch.py'])
 
     viz_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
@@ -86,9 +86,9 @@ def generate_launch_description():
             description='Enable Sensor Fusion Nodes'),
 
         DeclareLaunchArgument(
-            name='drive',
+            name='teleop',
             default_value='True',
-            description='Enable Drive Nodes'),
+            description='Enable Teleop Nodes'),
 
         DeclareLaunchArgument(
             name='js_topic',
@@ -117,11 +117,12 @@ def generate_launch_description():
             launch_arguments={'config': LaunchConfiguration('config')}.items()),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(drive_launch_path),
-            condition=IfCondition(LaunchConfiguration('drive'))),
+            PythonLaunchDescriptionSource(twist_mixer_launch_path),
+            condition=IfCondition(LaunchConfiguration('teleop'))),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(teleop_launch_path),
+            condition=IfCondition(LaunchConfiguration('teleop')),
             launch_arguments={'joy_config': LaunchConfiguration('joy_config')}.items()),
 
         IncludeLaunchDescription(
