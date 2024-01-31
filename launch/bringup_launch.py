@@ -117,7 +117,7 @@ def generate_launch_description():
             launch_arguments={'config': LaunchConfiguration('config')}.items()),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(twist_mixer_launch_path),
+            PythonLaunchDescriptionSource(mixer_launch_path),
             condition=IfCondition(LaunchConfiguration('teleop'))),
 
         IncludeLaunchDescription(
