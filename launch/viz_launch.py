@@ -34,7 +34,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name='viz_config',
             default_value='none',
-            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rviz (RViz Config)'),
+            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rviz (RViz Config), none (Disabled)'),
 
         DeclareLaunchArgument(
             name='use_sim_time',
