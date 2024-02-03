@@ -35,7 +35,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name='viz_config',
             default_value='none',
-            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rosboard (ROSBoard), rviz (RViz Config), none (Disabled)'),
+            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rviz (RViz Config), none (Disabled)'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(teleop_launch_path),
