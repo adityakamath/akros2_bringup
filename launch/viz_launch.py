@@ -34,7 +34,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name='viz_config',
             default_value='none',
-            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rosboard (ROSBoard), rviz (RViz Config)'),
+            description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rviz (RViz Config)'),
 
         DeclareLaunchArgument(
             name='use_sim_time',
@@ -56,12 +56,6 @@ def generate_launch_description():
                 'port': '9090',
                 'use_compression': 'true',
             }.items()),
-
-        Node(
-            condition=LaunchConfigurationEquals('viz_config', 'rosboard'),
-            package='rosboard',
-            executable='rosboard_node',
-            name='rosboard'),
 
         Node(
             condition=LaunchConfigurationEquals('viz_config', 'rviz'),
