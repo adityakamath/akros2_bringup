@@ -15,7 +15,6 @@ This is the main launch file that is run on the robot, and can be configured wit
 * ```viz_config```: Selects one of the following visualization configs for launching related packages (Default: ```foxglove```):
     * ```foxglove```: Launches [foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:8765)
     * ```rosbridge```: Launches [rosbridge_server](https://github.com/RobotWebTools/rosbridge_suite/tree/ros2/rosbridge_server/launch) for [Foxglove Studio](https://foxglove.dev/docs/studio/connection) (localhost:9000)
-    * ```rosboard```: Launches [ROSBoard](https://github.com/adityakamath/rosboard) server (localhost:8000)
     * ```rviz```: Launches [RViz2](https://github.com/ros2/rviz) locally on the machine with the default configuration in ```rviz/default.rviz``` in this repository.
     * ```none```:  Disabled
   (*Note*: for rosboard, a personal fork is used, with the port number changed to 8000 instead of 8888, because 8888 is used by Jupyterlab in my environment. It also has some small (warning) fixes for Humble.)
