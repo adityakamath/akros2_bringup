@@ -20,8 +20,8 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    teleop_launch_path = PathJoinSubstitution(
-        [FindPackageShare('akros2_base'), 'launch', 'teleop_launch.py'])
+    joy_launch_path = PathJoinSubstitution(
+        [FindPackageShare('akros2_base'), 'launch', 'joy_launch.py'])
 
     viz_launch_path = PathJoinSubstitution(
         [FindPackageShare('akros2_bringup'), 'launch', 'viz_launch.py'])
@@ -38,7 +38,7 @@ def generate_launch_description():
             description='Select Visualization Config: foxglove (Foxglove Bridge), rosbridge (ROSBridge Server), rviz (RViz Config), none (Disabled)'),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(teleop_launch_path),
+            PythonLaunchDescriptionSource(joy_launch_path),
             launch_arguments={'joy_config': LaunchConfiguration('joy_config')}.items()),
 
         IncludeLaunchDescription(

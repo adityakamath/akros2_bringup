@@ -13,7 +13,9 @@
   <test_depend>python3-pytest</test_depend>
 
   <depend>akros2_base</depend>
-  <depend>akros2_description</depend>
+  <depend>akros2_description</depend
+
+  <depend>mqtt_client</depend>
 
   <depend>foxglove_bridge</depend>
   <depend>rosbridge_server</depend>
