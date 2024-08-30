@@ -1,4 +1,7 @@
 # akros2_bringup
+![](https://img.shields.io/badge/ROS%202%20Humble-Ubuntu%2022.04-blue) ![GitHub License](https://img.shields.io/github/license/adityakamath/akros2_bringup)
+ ![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/kamathsblog)
+ 
 ROS2 package to bringup the AKROS2 robot with different configurations - Mecanum Drive (4 wheeled), Omni-Wheel Drive (3 wheeled), Differential Drive (2 wheeled)
 
 
